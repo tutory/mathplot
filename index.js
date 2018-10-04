@@ -4,11 +4,11 @@ shapes = [
   {
     type: 'coord',
     args: {
-      startX: -10,
+      startX: -3,
       startY: -10,
-      endX: 10,
+      endX: 8,
       endY: 10,
-      stepX: 1,
+      stepX: 2,
       stepY: 1,
       grid: true,
     },
@@ -20,7 +20,7 @@ shapes = [
       endX: 10,
       startY: -10,
       endY: 10,
-      fn: x => x * x,
+      fn: x => Math.tan(x),
       color: 'green',
     },
   },
@@ -49,8 +49,8 @@ shapes = [
   {
     type: 'circle',
     args: {
-      centerX: 3,
-      centerY: 3,
+      centerX: -13,
+      centerY: 30,
       radius: 1,
       fill: 'silver',
       stroke: 'black',

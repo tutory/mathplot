@@ -1,5 +1,15 @@
 const m = require('mithril')
-const { times } = require('../utils')
+
+function range0(from, to, step = 1) {
+  const arr = []
+  for (let i = -step; i > from; i -= step) {
+    arr.unshift(i)
+  }
+  for (let i = step; i < to; i += step) {
+    arr.push(i)
+  }
+  return arr
+}
 
 function parse(token) {
   return {
@@ -14,6 +24,54 @@ function parse(token) {
 }
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
+  function xLabelsView() {
+    return range0(args.startX, args.endX, args.stepX).map(x => {
+      return m(
+        'text',
+        {
+          x: scaleX * (offsetX + x),
+          y: scaleY * offsetY + gapSize,
+          style: textStyleX,
+        },
+        x
+      )
+    })
+  }
+  function xGridLinesView() {
+    return range0(args.startX, args.endX, args.stepX).map(x =>
+      m('line', {
+        x1: scaleX * (offsetX + x),
+        y1: scaleY * (offsetY + (args.grid ? args.endY : 0)),
+        x2: scaleX * (offsetX + x),
+        y2: scaleY * (offsetY + (args.grid ? args.startY : gapSize)),
+        style: args.grid ? lineStyleGrid : lineStyle,
+      })
+    )
+  }
+  function yLabelsView() {
+    return range0(args.startY + args.stepY, args.endY, args.stepY).map(y => {
+      return m(
+        'text',
+        {
+          y: scaleY * (offsetY + y),
+          x: scaleX * offsetX - gapSize,
+          style: textStyleY,
+        },
+        -y
+      )
+    })
+  }
+  function yGridLinesView() {
+    return range0(args.startY + args.stepY, args.endY, args.stepY).map(y =>
+      m('line', {
+        y1: scaleY * (offsetY + y),
+        x1: scaleX * (offsetX + (args.grid ? args.endX : 0)),
+        y2: scaleY * (offsetY + y),
+        x2: scaleX * (offsetX + (args.grid ? args.startX : gapSize)),
+        style: args.grid ? lineStyleGrid : lineStyle,
+      })
+    )
+  }
   const lineStyle = {
     strokeWidth: '1px',
     stroke: 'black',
@@ -22,19 +80,24 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     strokeWidth: '1px',
     stroke: 'lightblue',
   }
-  const textStyleHorizontal = {
+  const textStyleY = {
     color: 'black',
     fontSize: `${fontSize}px`,
     textAnchor: 'end',
     alignmentBaseline: 'central',
   }
-  const textStyleVertical = Object.assign({}, textStyleHorizontal, {
+  const textStyleX = Object.assign({}, textStyleY, {
     textAnchor: 'middle',
     alignmentBaseline: 'before-edge',
   })
   const gapSize = 5
   const fontSize = 15
   return [
+    xGridLinesView(),
+    xLabelsView(),
+    yGridLinesView(),
+    yLabelsView(),
+
     m('line', {
       x1: scaleX * (offsetX + args.startX),
       y1: scaleY * offsetY,
@@ -44,101 +107,11 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     }),
     m('line', {
       x1: scaleX * offsetX,
-      y1: scaleY * (offsetY - args.startY),
+      y1: scaleY * (offsetY + args.startY),
       x2: scaleX * offsetX,
-      y2: scaleY * (offsetY - args.endY),
+      y2: scaleY * (offsetY + args.endY),
       style: lineStyle,
     }),
-    // right
-    times(args.endX / args.stepX - 1).map(i => [
-      m('line', {
-        x1: scaleX * (offsetX + (i + 1) * args.stepX),
-        y1: scaleY * (offsetY + (args.grid ? args.endY : 0)),
-        x2: scaleX * (offsetX + (i + 1) * args.stepX),
-        y2: scaleY * (offsetY + (args.grid ? args.startY : gapSize)),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      }),
-      m(
-        'text',
-        {
-          x: scaleX * (offsetX + (i + 1) * args.stepX),
-          y: scaleY * offsetY + gapSize,
-          style: textStyleVertical,
-        },
-        (i + 1) * args.stepX
-      ),
-    ]),
-    // left
-    times(-args.startX / args.stepX - 1).map(i => [
-      m('line', {
-        x1: scaleX * (offsetX - (i + 1) * args.stepX),
-        y1: scaleY * (offsetY + (args.grid ? args.endX : 0)),
-        x2: scaleX * (offsetX - (i + 1) * args.stepX),
-        y2: scaleY * (offsetY + (args.grid ? args.startX : gapSize)),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      }),
-      m(
-        'text',
-        {
-          x: scaleX * (offsetX - (i + 1) * args.stepX),
-          y: scaleY * offsetY + gapSize,
-          style: textStyleVertical,
-        },
-        -(i + 1) * args.stepX
-      ),
-    ]),
-    // top
-    times(args.endY / args.stepY - 1).map(i => [
-      m('line', {
-        x1: scaleX * (offsetX + (args.grid ? args.endX : 0)),
-        y1: scaleY * (offsetY - (i + 1) * args.stepY),
-        x2: scaleX * (offsetX + (args.grid ? args.startX : gapSize)),
-        y2: scaleY * (offsetY - (i + 1) * args.stepY),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      }),
-      m(
-        'text',
-        {
-          x: scaleX * offsetX - gapSize * 2,
-          y: scaleY * (offsetY - (i + 1) * args.stepY),
-          style: textStyleHorizontal,
-        },
-        (i + 1) * args.stepY
-      ),
-    ]),
-    // down
-    times(-args.startY / args.stepY - 1).map(i => [
-      m('line', {
-        x1: scaleX * (offsetX - (args.grid ? args.endX : 0)),
-        y1: scaleY * (offsetY + (i + 1) * args.stepY),
-        x2: scaleX * (offsetX - (args.grid ? args.startX : gapSize)),
-        y2: scaleY * (offsetY + (i + 1) * args.stepY),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      }),
-      m(
-        'text',
-        {
-          x: scaleX * offsetX - gapSize * 2,
-          y: scaleY * (offsetY + (i + 1) * args.stepY),
-          style: textStyleHorizontal,
-        },
-        -(i + 1) * args.stepY
-      ),
-    ]),
-    // origin
-    m(
-      'text',
-      {
-        x: scaleX * offsetX - gapSize * 2,
-        y: scaleY * offsetY + gapSize,
-        style: Object.assign({}, textStyleHorizontal, {
-          alignmentBaseline: 'text-before-edge',
-        }),
-      },
-      0
-    ),
-
-    //origin
   ]
 }
 
