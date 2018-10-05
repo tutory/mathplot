@@ -22,6 +22,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     {
       labelX: 0,
       labelY: args.fn(args.labelX || 0),
+      color: 'green',
+      strokeDasharray: null,
     },
     args
   )
@@ -46,7 +48,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         style: {
           strokeWidth: '2px',
           fill: 'none',
-          stroke: args.color || 'green',
+          stroke: args.color,
+          strokeDasharray: args.strokeDasharray,
         },
       })
     )

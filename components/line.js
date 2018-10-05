@@ -7,6 +7,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     {
       strokeWidth: '2px',
       color: 'orange',
+      strokeDasharray: null,
     },
     args
   )
@@ -44,7 +45,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       style: {
         strokeWidth: args.strokeWidth,
         stroke: args.color,
-        fill: 'none',
+        strokeDasharray: args.strokeDasharray,
       },
     }),
     labelView(),

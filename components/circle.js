@@ -17,9 +17,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     cy: scaleY * (offsetY - args.centerY),
     rx: scaleX * args.radius,
     ry: scaleY * args.radius,
-    stroke: args.stroke,
-    'stroke-width': args.strokeWidth,
-    fill: args.fill,
+    style: {
+      stroke: args.stroke,
+      strokeWidth: args.strokeWidth,
+      strokeDasharray: args.strokeDasharray,
+      fill: args.fill,
+    },
   })
 }
 
