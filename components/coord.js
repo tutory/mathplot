@@ -27,8 +27,8 @@ function parse(token) {
     startY: Math.min(0, toInt(token[1])),
     endX: Math.max(0, toInt(token[2])),
     endY: Math.max(0, toInt(token[3])),
-    stepX: toInt(token[4]) || 1,
-    stepY: toInt(token[5]) || 1,
+    stepGridX: toInt(token[4]) || 1,
+    stepGridY: toInt(token[5]) || 1,
     grid: true,
   }
 }
@@ -38,13 +38,23 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     {
       labelX: 'x',
       labelY: 'y',
-      stepLabelsX: args.stepX || 1,
-      stepLabelsY: args.stepY || 1,
+      stepLabelsX: args.stepGridX || 1,
+      stepLabelsY: args.stepGridY || 1,
       labelXView: x => round(x),
       labelYView: x => round(x),
     },
     args
   )
+
+  const axisStyle = {
+    strokeWidth: '1px',
+    stroke: 'black',
+  }
+
+  const gridStyle = {
+    strokeWidth: '1px',
+    stroke: 'lightblue',
+  }
 
   function xLabelsView() {
     const steps = range0(args.startX, args.endX, args.stepLabelsX)
@@ -56,7 +66,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           {
             x: scaleX * (offsetX + x),
             y: scaleY * offsetY + MARGIN,
-            style: textStyleX,
+            style: {
+              textAnchor: 'middle',
+              alignmentBaseline: 'hanging',
+            },
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelX : args.labelXView(x)
@@ -66,21 +79,21 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           y1: scaleY * offsetY + MARGIN,
           x2: scaleX * (offsetX + x),
           y2: scaleY * offsetY,
-          style: lineStyle,
+          style: axisStyle,
         }),
       ]
     })
   }
 
   function xGridLinesView() {
-    return range0(args.startX, args.endX, args.stepX).map(x => {
+    return range0(args.startX, args.endX, args.stepGridX).map(x => {
       return [
         m('line', {
           x1: scaleX * (offsetX + x),
           y1: scaleY * (offsetY - args.endY),
           x2: scaleX * (offsetX + x),
           y2: scaleY * (offsetY - args.startY),
-          style: lineStyleGrid,
+          style: gridStyle,
         }),
       ]
     })
@@ -96,7 +109,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           {
             y: scaleY * (offsetY - y),
             x: scaleX * offsetX - 2 * MARGIN,
-            style: textStyleY,
+            style: {
+              textAnchor: 'end',
+              alignmentBaseline: 'middle',
+            },
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelY : args.labelYView(y)
@@ -106,21 +122,21 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           x1: scaleX * offsetX - MARGIN,
           y2: scaleY * (offsetY - y),
           x2: scaleX * offsetX,
-          style: lineStyle,
+          style: axisStyle,
         }),
       ]
     })
   }
 
   function yGridLinesView() {
-    return range0(args.startY, args.endY, args.stepY).map(y => {
+    return range0(args.startY, args.endY, args.stepGridY).map(y => {
       return [
         m('line', {
           y1: scaleY * (offsetY - y),
           x1: scaleX * (offsetX + args.endX),
           y2: scaleY * (offsetY - y),
           x2: scaleX * (offsetX + args.startX),
-          style: lineStyleGrid,
+          style: gridStyle,
         }),
       ]
     })
@@ -133,7 +149,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         y1: scaleY * offsetY,
         x2: scaleX * (offsetX + args.endX),
         y2: scaleY * offsetY,
-        style: lineStyle,
+        style: axisStyle,
       }),
       m('path', {
         d: `M ${scaleX * (offsetX + args.endX)},${scaleY * offsetY}
@@ -153,7 +169,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         y1: scaleY * (offsetY - args.startY),
         x2: scaleX * offsetX,
         y2: scaleY * (offsetY - args.endY),
-        style: lineStyle,
+        style: axisStyle,
       }),
       m('path', {
         d: `M ${scaleX * offsetX},${scaleY * (offsetY - args.endY)}
@@ -166,23 +182,22 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       }),
     ]
   }
-  const lineStyle = {
-    strokeWidth: '1px',
-    stroke: 'black',
+
+  function originView() {
+    return m(
+      'text',
+      {
+        y: scaleY * offsetY + MARGIN,
+        x: scaleX * offsetX - MARGIN,
+        style: {
+          textAnchor: 'end',
+          alignmentBaseline: 'hanging',
+        },
+      },
+      'O'
+    )
   }
-  const lineStyleGrid = {
-    strokeWidth: '1px',
-    stroke: 'lightblue',
-  }
-  const textStyleY = {
-    color: 'black',
-    textAnchor: 'end',
-    alignmentBaseline: 'middle',
-  }
-  const textStyleX = Object.assign({}, textStyleY, {
-    textAnchor: 'middle',
-    alignmentBaseline: 'before-edge',
-  })
+
   return [
     xGridLinesView(),
     xLabelsView(),
@@ -190,6 +205,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     yLabelsView(),
     xAxisView(),
     yAxisView(),
+    originView(),
   ]
 }
 
