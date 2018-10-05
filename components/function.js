@@ -18,29 +18,61 @@ function groupPoints(points, minY, maxY) {
 }
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
-  const points = times((args.endX - args.startX) * scaleX).map(i => [
-    args.startX + i / scaleX,
-    args.fn(args.startX + i / scaleX),
-  ])
-  const pointGroups = groupPoints(points, args.startY, args.endY)
-  return pointGroups.map(points =>
-    m('path', {
-      d:
-        'M' +
-        points
-          .map(
-            point =>
-              `${scaleX * (point[0] + offsetX)},${scaleY *
-                (offsetY - point[1])}`
-          )
-          .join(' '),
-      style: {
-        strokeWidth: '2px',
-        fill: 'none',
-        stroke: args.color || 'green',
-      },
-    })
+  args = Object.assign(
+    {
+      labelX: 0,
+      labelY: args.fn(args.labelX || 0),
+    },
+    args
   )
+
+  function graphView() {
+    const points = times((args.endX - args.startX) * scaleX).map(i => [
+      args.startX + i / scaleX,
+      args.fn(args.startX + i / scaleX),
+    ])
+    const pointGroups = groupPoints(points, args.startY, args.endY)
+    return pointGroups.map(points =>
+      m('path', {
+        d:
+          'M' +
+          points
+            .map(
+              point =>
+                `${scaleX * (point[0] + offsetX)},${scaleY *
+                  (offsetY - point[1])}`
+            )
+            .join(' '),
+        style: {
+          strokeWidth: '2px',
+          fill: 'none',
+          stroke: args.color || 'green',
+        },
+      })
+    )
+  }
+
+  function labelView() {
+    if (args.label) {
+      return m(
+        'text',
+        {
+          x: scaleX * (offsetX + args.labelX),
+          y: scaleY * (offsetY - args.labelY),
+          style: {
+            fill: args.color,
+            textAnchor: 'middle',
+            alignmentBaseline: 'middle',
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+          },
+        },
+        args.label
+      )
+    }
+  }
+
+  return [graphView(), labelView()]
 }
 
 module.exports = {
