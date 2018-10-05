@@ -81,6 +81,7 @@ const types = {
   function: require('./components/function'),
   polygon: require('./components/polygon'),
   line: require('./components/line'),
+  point: require('./components/point'),
 }
 
 m.mount(document.body, {
