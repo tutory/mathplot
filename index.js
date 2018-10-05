@@ -122,6 +122,14 @@ m.mount(document.body, {
         .axisLabel {
           font-style: italic;
         }
+        text {
+          font-size: 15px;
+          stroke: white;
+          stroke-width: 7px;
+          paint-order: stroke fill;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
       `
       ),
       m(

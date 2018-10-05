@@ -3,6 +3,8 @@ const { last } = require('../utils')
 
 const AW = 10
 const AH = 20
+const MARGIN = 5
+const FS = 15
 
 function round(value) {
   return Math.round(value * 1000) / 1000
@@ -53,7 +55,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           'text',
           {
             x: scaleX * (offsetX + x),
-            y: scaleY * offsetY + margin,
+            y: scaleY * offsetY + MARGIN,
             style: textStyleX,
             className: isAxisLabel ? 'axisLabel' : '',
           },
@@ -61,7 +63,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ),
         m('line', {
           x1: scaleX * (offsetX + x),
-          y1: scaleY * offsetY + margin,
+          y1: scaleY * offsetY + MARGIN,
           x2: scaleX * (offsetX + x),
           y2: scaleY * offsetY,
           style: lineStyle,
@@ -77,7 +79,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         return [
           m('line', {
             x1: scaleX * (offsetX + x),
-            y1: scaleY * offsetY + 3 * margin + fontSize,
+            y1: scaleY * offsetY + 3 * MARGIN + FS,
             x2: scaleX * (offsetX + x),
             y2: scaleY * (offsetY - args.startY),
             style: lineStyleGrid,
@@ -86,7 +88,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
             x1: scaleX * (offsetX + x),
             y1: scaleY * (offsetY - args.endY),
             x2: scaleX * (offsetX + x),
-            y2: scaleY * offsetY + margin,
+            y2: scaleY * offsetY + MARGIN,
             style: lineStyleGrid,
           }),
         ]
@@ -112,7 +114,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           'text',
           {
             y: scaleY * (offsetY - y),
-            x: scaleX * offsetX - 2 * margin,
+            x: scaleX * offsetX - 2 * MARGIN,
             style: textStyleY,
             className: isAxisLabel ? 'axisLabel' : '',
           },
@@ -120,7 +122,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ),
         m('line', {
           y1: scaleY * (offsetY - y),
-          x1: scaleX * offsetX - margin,
+          x1: scaleX * offsetX - MARGIN,
           y2: scaleY * (offsetY - y),
           x2: scaleX * offsetX,
           style: lineStyle,
@@ -136,7 +138,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         return [
           m('line', {
             y1: scaleY * (offsetY - y),
-            x1: scaleX * offsetX - margin - fontSize * 2, // this is a dump assumption
+            x1: scaleX * offsetX - MARGIN - FS * 2, // this is a dump assumption
             y2: scaleY * (offsetY - y),
             x2: scaleX * (offsetX + args.startX),
             style: lineStyleGrid,
@@ -145,7 +147,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
             y1: scaleY * (offsetY - y),
             x1: scaleX * (offsetX + args.endX),
             y2: scaleY * (offsetY - y),
-            x2: scaleX * offsetX - margin,
+            x2: scaleX * offsetX - MARGIN,
             style: lineStyleGrid,
           }),
         ]
@@ -212,7 +214,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
   const textStyleY = {
     color: 'black',
-    fontSize: `${fontSize}px`,
+    fontSize: `${FS}px`,
     textAnchor: 'end',
     alignmentBaseline: 'central',
   }
@@ -220,8 +222,6 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     textAnchor: 'middle',
     alignmentBaseline: 'before-edge',
   })
-  const margin = 5
-  const fontSize = 15
   return [
     xGridLinesView(),
     xLabelsView(),
