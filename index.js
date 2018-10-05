@@ -64,12 +64,19 @@ shapes = [
       strokeWidth: 1,
     },
   },
+  {
+    type: 'polygon',
+    args: {
+      points: [[0, 0], [1, 1], [-1, 1]],
+    },
+  },
 ]
 
 const types = {
   coord: require('./components/coord'),
   circle: require('./components/circle'),
   function: require('./components/function'),
+  polygon: require('./components/polygon'),
 }
 
 m.mount(document.body, {
