@@ -65,9 +65,12 @@ shapes = [
     },
   },
   {
-    type: 'polygon',
+    type: 'line',
     args: {
-      points: [[0, 0], [1, 1], [-1, 1]],
+      startX: -1,
+      startY: -10,
+      endX: 2,
+      endY: 1,
     },
   },
 ]
@@ -77,6 +80,7 @@ const types = {
   circle: require('./components/circle'),
   function: require('./components/function'),
   polygon: require('./components/polygon'),
+  line: require('./components/line'),
 }
 
 m.mount(document.body, {
