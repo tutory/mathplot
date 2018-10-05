@@ -176,7 +176,6 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
   const textStyleY = {
     color: 'black',
-    fontSize: `${FS}px`,
     textAnchor: 'end',
     alignmentBaseline: 'middle',
   }

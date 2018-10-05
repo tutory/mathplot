@@ -63,6 +63,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       )
     }
   }
+
   const crossLineStyle = {
     strokeWidth: args.strokeWidth,
     stroke: args.color,
