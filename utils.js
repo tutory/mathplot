@@ -10,7 +10,12 @@ function times(n) {
   return arr
 }
 
+function last(arr) {
+  return arr[arr.length - 1]
+}
+
 module.exports = {
   toInt,
   times,
+  last,
 }

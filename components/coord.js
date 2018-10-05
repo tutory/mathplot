@@ -1,4 +1,5 @@
 const m = require('mithril')
+const { last } = require('../utils')
 
 function range0(from, to, step = 1) {
   const arr = []
@@ -24,8 +25,18 @@ function parse(token) {
 }
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
+  args = Object.assign(
+    {
+      labelX: 'x',
+      labelY: 'y',
+      stepLabelsX: args.stepX || 1,
+      stepLabelsY: args.stepY || 1,
+    },
+    args
+  )
   function xLabelsView() {
-    return range0(args.startX, args.endX, args.stepX).map(x => {
+    const steps = range0(args.startX, args.endX, args.stepLabelsX)
+    return steps.map(x => {
       return m(
         'text',
         {
@@ -33,7 +44,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           y: scaleY * offsetY + gapSize,
           style: textStyleX,
         },
-        x
+        x === last(steps) ? args.labelX : x
       )
     })
   }
@@ -49,7 +60,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     )
   }
   function yLabelsView() {
-    return range0(args.startY + args.stepY, args.endY, args.stepY).map(y => {
+    const steps = range0(args.startY, args.endY, args.stepLabelsY)
+    return steps.map(y => {
       return m(
         'text',
         {
@@ -57,12 +69,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           x: scaleX * offsetX - gapSize,
           style: textStyleY,
         },
-        -y
+        y === steps[0] ? args.labelY : -y
       )
     })
   }
   function yGridLinesView() {
-    return range0(args.startY + args.stepY, args.endY, args.stepY).map(y =>
+    return range0(args.startY, args.endY, args.stepY).map(y =>
       m('line', {
         y1: scaleY * (offsetY + y),
         x1: scaleX * (offsetX + (args.grid ? args.endX : 0)),
