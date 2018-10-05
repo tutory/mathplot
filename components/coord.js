@@ -4,6 +4,10 @@ const { last } = require('../utils')
 const AW = 10
 const AH = 20
 
+function round(value) {
+  return Math.round(value * 1000) / 1000
+}
+
 function range0(from, to, step = 1) {
   const arr = []
   for (let i = -step; i > from; i -= step) {
@@ -34,8 +38,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       labelY: 'y',
       stepLabelsX: args.stepX || 1,
       stepLabelsY: args.stepY || 1,
-      labelXView: x => x,
-      labelYView: x => x,
+      labelXView: x => round(x),
+      labelYView: x => round(x),
     },
     args
   )
@@ -44,58 +48,118 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     const steps = range0(args.startX, args.endX, args.stepLabelsX)
     return steps.map(x => {
       const isAxisLabel = x === last(steps)
-      return m(
-        'text',
-        {
-          x: scaleX * (offsetX + x),
-          y: scaleY * offsetY + gapSize,
-          style: textStyleX,
-          className: isAxisLabel ? 'axisLabel' : '',
-        },
-        isAxisLabel ? args.labelX : args.labelXView(x)
-      )
+      return [
+        m(
+          'text',
+          {
+            x: scaleX * (offsetX + x),
+            y: scaleY * offsetY + margin,
+            style: textStyleX,
+            className: isAxisLabel ? 'axisLabel' : '',
+          },
+          isAxisLabel ? args.labelX : args.labelXView(x)
+        ),
+        m('line', {
+          x1: scaleX * (offsetX + x),
+          y1: scaleY * offsetY + margin,
+          x2: scaleX * (offsetX + x),
+          y2: scaleY * offsetY,
+          style: lineStyle,
+        }),
+      ]
     })
   }
 
   function xGridLinesView() {
-    return range0(args.startX, args.endX, args.stepX).map(x =>
-      m('line', {
-        x1: scaleX * (offsetX + x),
-        y1: scaleY * (offsetY - (args.grid ? args.endY : 0)),
-        x2: scaleX * (offsetX + x),
-        y2: scaleY * (offsetY - (args.grid ? args.startY : gapSize)),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      })
-    )
+    return range0(args.startX, args.endX, args.stepX).map(x => {
+      const hasLabel = x % args.stepLabelsX === 0
+      if (hasLabel) {
+        return [
+          m('line', {
+            x1: scaleX * (offsetX + x),
+            y1: scaleY * offsetY + 3 * margin + fontSize,
+            x2: scaleX * (offsetX + x),
+            y2: scaleY * (offsetY - args.startY),
+            style: lineStyleGrid,
+          }),
+          m('line', {
+            x1: scaleX * (offsetX + x),
+            y1: scaleY * (offsetY - args.endY),
+            x2: scaleX * (offsetX + x),
+            y2: scaleY * offsetY + margin,
+            style: lineStyleGrid,
+          }),
+        ]
+      }
+      return [
+        m('line', {
+          x1: scaleX * (offsetX + x),
+          y1: scaleY * (offsetY - args.endY),
+          x2: scaleX * (offsetX + x),
+          y2: scaleY * (offsetY - args.startY),
+          style: lineStyleGrid,
+        }),
+      ]
+    })
   }
 
   function yLabelsView() {
     const steps = range0(args.startY, args.endY, args.stepLabelsY)
     return steps.map(y => {
       const isAxisLabel = y === last(steps)
-      return m(
-        'text',
-        {
-          y: scaleY * (offsetY - y),
-          x: scaleX * offsetX - gapSize,
-          style: textStyleY,
-          className: isAxisLabel ? 'axisLabel' : '',
-        },
-        isAxisLabel ? args.labelY : args.labelYView(y)
-      )
+      return [
+        m(
+          'text',
+          {
+            y: scaleY * (offsetY - y),
+            x: scaleX * offsetX - 2 * margin,
+            style: textStyleY,
+            className: isAxisLabel ? 'axisLabel' : '',
+          },
+          isAxisLabel ? args.labelY : args.labelYView(y)
+        ),
+        m('line', {
+          y1: scaleY * (offsetY - y),
+          x1: scaleX * offsetX - margin,
+          y2: scaleY * (offsetY - y),
+          x2: scaleX * offsetX,
+          style: lineStyle,
+        }),
+      ]
     })
   }
 
   function yGridLinesView() {
-    return range0(args.startY, args.endY, args.stepY).map(y =>
-      m('line', {
-        y1: scaleY * (offsetY - y),
-        x1: scaleX * (offsetX + (args.grid ? args.endX : 0)),
-        y2: scaleY * (offsetY - y),
-        x2: scaleX * (offsetX + (args.grid ? args.startX : gapSize)),
-        style: args.grid ? lineStyleGrid : lineStyle,
-      })
-    )
+    return range0(args.startY, args.endY, args.stepY).map(y => {
+      const hasLabel = round(y % args.stepLabelsY) === 0
+      if (hasLabel) {
+        return [
+          m('line', {
+            y1: scaleY * (offsetY - y),
+            x1: scaleX * offsetX - margin - fontSize * 2, // this is a dump assumption
+            y2: scaleY * (offsetY - y),
+            x2: scaleX * (offsetX + args.startX),
+            style: lineStyleGrid,
+          }),
+          m('line', {
+            y1: scaleY * (offsetY - y),
+            x1: scaleX * (offsetX + args.endX),
+            y2: scaleY * (offsetY - y),
+            x2: scaleX * offsetX - margin,
+            style: lineStyleGrid,
+          }),
+        ]
+      }
+      return [
+        m('line', {
+          y1: scaleY * (offsetY - y),
+          x1: scaleX * (offsetX + args.endX),
+          y2: scaleY * (offsetY - y),
+          x2: scaleX * (offsetX + args.startX),
+          style: lineStyleGrid,
+        }),
+      ]
+    })
   }
 
   function xAxisView() {
@@ -156,7 +220,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     textAnchor: 'middle',
     alignmentBaseline: 'before-edge',
   })
-  const gapSize = 5
+  const margin = 5
   const fontSize = 15
   return [
     xGridLinesView(),

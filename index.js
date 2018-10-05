@@ -13,7 +13,7 @@ shapes = [
     args: Object.assign(
       {
         stepLabelsX: Math.PI / 2,
-        stepLabelsY: 1,
+        stepLabelsY: 2,
         stepX: Math.PI / 4,
         stepY: 1,
         grid: true,
