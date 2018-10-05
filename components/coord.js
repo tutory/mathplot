@@ -43,14 +43,16 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function xLabelsView() {
     const steps = range0(args.startX, args.endX, args.stepLabelsX)
     return steps.map(x => {
+      const isAxisLabel = x === last(steps)
       return m(
         'text',
         {
           x: scaleX * (offsetX + x),
           y: scaleY * offsetY + gapSize,
           style: textStyleX,
+          className: isAxisLabel ? 'axisLabel' : '',
         },
-        x === last(steps) ? args.labelX : args.labelXView(x)
+        isAxisLabel ? args.labelX : args.labelXView(x)
       )
     })
   }
@@ -70,14 +72,16 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function yLabelsView() {
     const steps = range0(args.startY, args.endY, args.stepLabelsY)
     return steps.map(y => {
+      const isAxisLabel = y === last(steps)
       return m(
         'text',
         {
           y: scaleY * (offsetY - y),
           x: scaleX * offsetX - gapSize,
           style: textStyleY,
+          className: isAxisLabel ? 'axisLabel' : '',
         },
-        y === last(steps) ? args.labelY : args.labelYView(y)
+        isAxisLabel ? args.labelY : args.labelYView(y)
       )
     })
   }

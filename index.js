@@ -107,16 +107,26 @@ m.mount(document.body, {
       types[shape.type].render(-minX, maxY, scaleX, scaleY, shape.args)
     )
 
-    return m(
-      'svg',
-      {
-        style: {
-          fontFamily: '"Latin Modern Roman", "open sans"',
+    return [
+      m(
+        'style',
+        `
+        svg {
+          font-family: "Latin Modern Roman", "open sans";
+        }
+        .axisLabel {
+          font-style: italic;
+        }
+      `
+      ),
+      m(
+        'svg',
+        {
+          width: `${(maxX - minX) * scaleX}px`,
+          height: `${(maxY - minY) * scaleY}px`,
         },
-        width: `${(maxX - minX) * scaleX}px`,
-        height: `${(maxY - minY) * scaleY}px`,
-      },
-      renderedShapes
-    )
+        renderedShapes
+      ),
+    ]
   },
 })
