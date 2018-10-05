@@ -1,8 +1,8 @@
 const m = require('mithril')
 const { last } = require('../utils')
 
-const ARROW_WIDTH = 6
-const ARROW_LENGTH = 20
+const AW = 10
+const AH = 20
 
 function range0(from, to, step = 1) {
   const arr = []
@@ -34,6 +34,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       labelY: 'y',
       stepLabelsX: args.stepX || 1,
       stepLabelsY: args.stepY || 1,
+      labelXView: x => x,
+      labelYView: x => x,
     },
     args
   )
@@ -48,7 +50,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           y: scaleY * offsetY + gapSize,
           style: textStyleX,
         },
-        x === last(steps) ? args.labelX : x
+        x === last(steps) ? args.labelX : args.labelXView(x)
       )
     })
   }
@@ -57,9 +59,9 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     return range0(args.startX, args.endX, args.stepX).map(x =>
       m('line', {
         x1: scaleX * (offsetX + x),
-        y1: scaleY * (offsetY + (args.grid ? args.endY : 0)),
+        y1: scaleY * (offsetY - (args.grid ? args.endY : 0)),
         x2: scaleX * (offsetX + x),
-        y2: scaleY * (offsetY + (args.grid ? args.startY : gapSize)),
+        y2: scaleY * (offsetY - (args.grid ? args.startY : gapSize)),
         style: args.grid ? lineStyleGrid : lineStyle,
       })
     )
@@ -71,11 +73,11 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return m(
         'text',
         {
-          y: scaleY * (offsetY + y),
+          y: scaleY * (offsetY - y),
           x: scaleX * offsetX - gapSize,
           style: textStyleY,
         },
-        y === steps[0] ? args.labelY : -y
+        y === last(steps) ? args.labelY : args.labelYView(y)
       )
     })
   }
@@ -83,9 +85,9 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function yGridLinesView() {
     return range0(args.startY, args.endY, args.stepY).map(y =>
       m('line', {
-        y1: scaleY * (offsetY + y),
+        y1: scaleY * (offsetY - y),
         x1: scaleX * (offsetX + (args.grid ? args.endX : 0)),
-        y2: scaleY * (offsetY + y),
+        y2: scaleY * (offsetY - y),
         x2: scaleX * (offsetX + (args.grid ? args.startX : gapSize)),
         style: args.grid ? lineStyleGrid : lineStyle,
       })
@@ -101,16 +103,13 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         y2: scaleY * offsetY,
         style: lineStyle,
       }),
-      m('polygon', {
-        points: [[0, 0], [-ARROW_LENGTH, -ARROW_WIDTH/2], [-ARROW_LENGTH, ARROW_WIDTH/2]]
-          .map(point =>
-            [
-              scaleX * (offsetX + args.endX) + point[0],
-              scaleY * offsetY + point[1],
-            ].join()
-          )
-          .join(' '),
-        style: lineStyle,
+      m('path', {
+        d: `M ${scaleX * (offsetX + args.endX)},${scaleY * offsetY}
+        c ${-AH / 2}, ${AW / 8}, ${-AH + AW / 4}, ${AW / 4}, ${-AH},${AW / 2}
+          0, 0, 0, 0, ${AW / 4}, ${-AW / 2}
+          0, 0, 0, 0, ${-AW / 4}, ${-AW / 2}
+          ${AW / 4}, ${AW / 4}, ${AH / 2}, ${(3 * AW) / 8}, ${AH}, ${AW / 2}
+        `,
       }),
     ]
   }
@@ -119,21 +118,19 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     return [
       m('line', {
         x1: scaleX * offsetX,
-        y1: scaleY * (offsetY + args.startY),
+        y1: scaleY * (offsetY - args.startY),
         x2: scaleX * offsetX,
-        y2: scaleY * (offsetY + args.endY),
+        y2: scaleY * (offsetY - args.endY),
         style: lineStyle,
       }),
-      m('polygon', {
-        points: [[0, 0], [-ARROW_WIDTH/2, ARROW_LENGTH], [ARROW_WIDTH/2, ARROW_LENGTH]]
-          .map(point =>
-            [
-              scaleX * offsetX + point[0],
-              scaleY * (offsetY + args.startY) + point[1],
-            ].join()
-          )
-          .join(' '),
-        style: lineStyle,
+      m('path', {
+        d: `M ${scaleX * offsetX},${scaleY * (offsetY - args.endY)}
+        c ${-AW / 8}, ${AH / 2}, ${-AW / 4}, ${AH + -AW / 4}, ${-AW / 2}, ${AH}
+          0, 0, 0, 0, ${AW / 2}, ${-AW / 4}
+          0, 0, 0, 0, ${AW / 2}, ${AW / 4}
+          ${-AW / 4}, ${-AW / 4}, ${(3 * -AW) / 8}, ${-AH / 2}, ${-AW /
+          2}, ${-AH}
+        `,
       }),
     ]
   }

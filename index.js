@@ -1,52 +1,57 @@
 const m = require('mithril')
 
+const dimensions = {
+  startX: -3,
+  startY: -10,
+  endX: 10,
+  endY: 10,
+}
+
 shapes = [
   {
     type: 'coord',
-    args: {
-      startX: -3,
-      startY: -10,
-      endX: 8,
-      endY: 10,
-      stepLabelsX: 2,
-      stepLabelsY: 2,
-      stepX: 1,
-      stepY: 1,
-      grid: true,
-    },
+    args: Object.assign(
+      {
+        stepLabelsX: Math.PI / 2,
+        stepLabelsY: 1,
+        stepX: Math.PI / 4,
+        stepY: 1,
+        grid: true,
+        labelY: 'f(x)',
+        labelXView: x => `${x / Math.PI === 1 ? '' : x / Math.PI}π`,
+      },
+      dimensions
+    ),
   },
   {
     type: 'function',
-    args: {
-      startX: -10,
-      endX: 10,
-      startY: -10,
-      endY: 10,
-      fn: x => Math.tan(x),
-      color: 'green',
-    },
+    args: Object.assign(
+      {
+        fn: x => Math.tan(x),
+        color: 'green',
+      },
+      dimensions
+    ),
   },
   {
     type: 'function',
-    args: {
-      startX: -10,
-      endX: 10,
-      startY: -10,
-      endY: 10,
-      fn: x => Math.sin(x) * 11,
-      color: 'turquoise',
-    },
+    args: Object.assign(
+      {
+        fn: x => Math.sin(x),
+        color: 'turquoise',
+      },
+      dimensions
+    ),
   },
   {
     type: 'function',
-    args: {
-      startX: -10,
-      endX: 10,
-      startY: -10,
-      endY: 10,
-      fn: x => 1 / x,
-      color: 'blue',
-    },
+    args: Object.assign(
+      {
+        fn: x => 1 / x,
+        color: 'blue',
+      },
+      dimensions
+    ),
   },
   {
     type: 'circle',
@@ -89,8 +94,8 @@ m.mount(document.body, {
     const maxY = shapes.reduce((maxY, shape) => {
       return Math.max(maxY, types[shape.type].getMaxY(shape))
     }, -Infinity)
-    const scaleX = 50
-    const scaleY = 30
+    const scaleX = 20 * Math.PI
+    const scaleY = 50
     const renderedShapes = shapes.map(shape =>
       types[shape.type].render(-minX, maxY, scaleX, scaleY, shape.args)
     )
@@ -99,7 +104,7 @@ m.mount(document.body, {
       'svg',
       {
         style: {
-          fontFamily: 'open sans',
+          fontFamily: '"Latin Modern Roman", "open sans"',
         },
         width: `${(maxX - minX) * scaleX}px`,
         height: `${(maxY - minY) * scaleY}px`,
