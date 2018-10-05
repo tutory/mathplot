@@ -74,25 +74,6 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
 
   function xGridLinesView() {
     return range0(args.startX, args.endX, args.stepX).map(x => {
-      const hasLabel = x % args.stepLabelsX === 0
-      if (hasLabel) {
-        return [
-          m('line', {
-            x1: scaleX * (offsetX + x),
-            y1: scaleY * offsetY + 3 * MARGIN + FS,
-            x2: scaleX * (offsetX + x),
-            y2: scaleY * (offsetY - args.startY),
-            style: lineStyleGrid,
-          }),
-          m('line', {
-            x1: scaleX * (offsetX + x),
-            y1: scaleY * (offsetY - args.endY),
-            x2: scaleX * (offsetX + x),
-            y2: scaleY * offsetY + MARGIN,
-            style: lineStyleGrid,
-          }),
-        ]
-      }
       return [
         m('line', {
           x1: scaleX * (offsetX + x),
@@ -133,25 +114,6 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
 
   function yGridLinesView() {
     return range0(args.startY, args.endY, args.stepY).map(y => {
-      const hasLabel = round(y % args.stepLabelsY) === 0
-      if (hasLabel) {
-        return [
-          m('line', {
-            y1: scaleY * (offsetY - y),
-            x1: scaleX * offsetX - MARGIN - FS * 2, // this is a dump assumption
-            y2: scaleY * (offsetY - y),
-            x2: scaleX * (offsetX + args.startX),
-            style: lineStyleGrid,
-          }),
-          m('line', {
-            y1: scaleY * (offsetY - y),
-            x1: scaleX * (offsetX + args.endX),
-            y2: scaleY * (offsetY - y),
-            x2: scaleX * offsetX - MARGIN,
-            style: lineStyleGrid,
-          }),
-        ]
-      }
       return [
         m('line', {
           y1: scaleY * (offsetY - y),
@@ -216,7 +178,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     color: 'black',
     fontSize: `${FS}px`,
     textAnchor: 'end',
-    alignmentBaseline: 'central',
+    alignmentBaseline: 'middle',
   }
   const textStyleX = Object.assign({}, textStyleY, {
     textAnchor: 'middle',
