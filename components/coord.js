@@ -1,6 +1,9 @@
 const m = require('mithril')
 const { last } = require('../utils')
 
+const ARROW_WIDTH = 6
+const ARROW_LENGTH = 20
+
 function range0(from, to, step = 1) {
   const arr = []
   for (let i = -step; i > from; i -= step) {
@@ -34,6 +37,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     },
     args
   )
+
   function xLabelsView() {
     const steps = range0(args.startX, args.endX, args.stepLabelsX)
     return steps.map(x => {
@@ -48,6 +52,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       )
     })
   }
+
   function xGridLinesView() {
     return range0(args.startX, args.endX, args.stepX).map(x =>
       m('line', {
@@ -59,6 +64,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       })
     )
   }
+
   function yLabelsView() {
     const steps = range0(args.startY, args.endY, args.stepLabelsY)
     return steps.map(y => {
@@ -73,6 +79,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       )
     })
   }
+
   function yGridLinesView() {
     return range0(args.startY, args.endY, args.stepY).map(y =>
       m('line', {
@@ -83,6 +90,52 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         style: args.grid ? lineStyleGrid : lineStyle,
       })
     )
+  }
+
+  function xAxisView() {
+    return [
+      m('line', {
+        x1: scaleX * (offsetX + args.startX),
+        y1: scaleY * offsetY,
+        x2: scaleX * (offsetX + args.endX),
+        y2: scaleY * offsetY,
+        style: lineStyle,
+      }),
+      m('polygon', {
+        points: [[0, 0], [-ARROW_LENGTH, -ARROW_WIDTH/2], [-ARROW_LENGTH, ARROW_WIDTH/2]]
+          .map(point =>
+            [
+              scaleX * (offsetX + args.endX) + point[0],
+              scaleY * offsetY + point[1],
+            ].join()
+          )
+          .join(' '),
+        style: lineStyle,
+      }),
+    ]
+  }
+
+  function yAxisView() {
+    return [
+      m('line', {
+        x1: scaleX * offsetX,
+        y1: scaleY * (offsetY + args.startY),
+        x2: scaleX * offsetX,
+        y2: scaleY * (offsetY + args.endY),
+        style: lineStyle,
+      }),
+      m('polygon', {
+        points: [[0, 0], [-ARROW_WIDTH/2, ARROW_LENGTH], [ARROW_WIDTH/2, ARROW_LENGTH]]
+          .map(point =>
+            [
+              scaleX * offsetX + point[0],
+              scaleY * (offsetY + args.startY) + point[1],
+            ].join()
+          )
+          .join(' '),
+        style: lineStyle,
+      }),
+    ]
   }
   const lineStyle = {
     strokeWidth: '1px',
@@ -109,21 +162,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     xLabelsView(),
     yGridLinesView(),
     yLabelsView(),
-
-    m('line', {
-      x1: scaleX * (offsetX + args.startX),
-      y1: scaleY * offsetY,
-      x2: scaleX * (offsetX + args.endX),
-      y2: scaleY * offsetY,
-      style: lineStyle,
-    }),
-    m('line', {
-      x1: scaleX * offsetX,
-      y1: scaleY * (offsetY + args.startY),
-      x2: scaleX * offsetX,
-      y2: scaleY * (offsetY + args.endY),
-      style: lineStyle,
-    }),
+    xAxisView(),
+    yAxisView(),
   ]
 }
 
