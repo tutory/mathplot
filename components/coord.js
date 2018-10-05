@@ -1,10 +1,8 @@
 const m = require('mithril')
 const { last } = require('../utils')
+const lineView = require('./line').render
 
-const AW = 10
-const AH = 20
 const MARGIN = 5
-const FS = 15
 
 function round(value) {
   return Math.round(value * 1000) / 1000
@@ -143,44 +141,27 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function xAxisView() {
-    return [
-      m('line', {
-        x1: scaleX * (offsetX + args.startX),
-        y1: scaleY * offsetY,
-        x2: scaleX * (offsetX + args.endX),
-        y2: scaleY * offsetY,
-        style: axisStyle,
-      }),
-      m('path', {
-        d: `M ${scaleX * (offsetX + args.endX)},${scaleY * offsetY}
-        c ${-AH / 2}, ${AW / 8}, ${-AH + AW / 4}, ${AW / 4}, ${-AH},${AW / 2}
-          0, 0, 0, 0, ${AW / 4}, ${-AW / 2}
-          0, 0, 0, 0, ${-AW / 4}, ${-AW / 2}
-          ${AW / 4}, ${AW / 4}, ${AH / 2}, ${(3 * AW) / 8}, ${AH}, ${AW / 2}
-        `,
-      }),
-    ]
+    return lineView(offsetX, offsetY, scaleX, scaleY, {
+      startX: args.startX,
+      startY: 0,
+      endX: args.endX,
+      endY: 0,
+      endForm: 'arrow',
+      color: 'black',
+      strokeWidth: 1,
+    })
   }
 
   function yAxisView() {
-    return [
-      m('line', {
-        x1: scaleX * offsetX,
-        y1: scaleY * (offsetY - args.startY),
-        x2: scaleX * offsetX,
-        y2: scaleY * (offsetY - args.endY),
-        style: axisStyle,
-      }),
-      m('path', {
-        d: `M ${scaleX * offsetX},${scaleY * (offsetY - args.endY)}
-        c ${-AW / 8}, ${AH / 2}, ${-AW / 4}, ${AH + -AW / 4}, ${-AW / 2}, ${AH}
-          0, 0, 0, 0, ${AW / 2}, ${-AW / 4}
-          0, 0, 0, 0, ${AW / 2}, ${AW / 4}
-          ${-AW / 4}, ${-AW / 4}, ${(3 * -AW) / 8}, ${-AH / 2}, ${-AW /
-          2}, ${-AH}
-        `,
-      }),
-    ]
+    return lineView(offsetX, offsetY, scaleX, scaleY, {
+      startX: 0,
+      startY: args.startY,
+      endX: 0,
+      endY: args.endY,
+      endForm: 'arrow',
+      color: 'black',
+      strokeWidth: 1,
+    })
   }
 
   function originView() {
