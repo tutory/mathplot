@@ -46,26 +46,41 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     }
   }
 
+  function arrowView(x, y, rot) {
+    return m('path', {
+      d: `M ${scaleX * (offsetX + x)},${scaleY * (offsetY - y)}
+      c ${-AW / 8}, ${AH / 2}, ${-AW / 4}, ${AH + -AW / 4}, ${-AW / 2}, ${AH}
+        0, 0, 0, 0, ${AW / 2}, ${-AW / 4}
+        0, 0, 0, 0, ${AW / 2}, ${AW / 4}
+        ${-AW / 4}, ${-AW / 4}, ${(3 * -AW) / 8}, ${-AH / 2}, ${-AW / 2}, ${-AH}
+      `,
+      style: {
+        fill: args.color,
+        transformOrigin: `${scaleX * (offsetX + x)}px ${scaleY *
+          (offsetY - y)}px`,
+        transform: `rotate(${rot}rad)`,
+      },
+    })
+  }
+
   function endFormView() {
     if (args.endForm === 'arrow') {
-      return m('path', {
-        d: `M ${scaleX * (offsetX + args.endX)},${scaleY *
-          (offsetY - args.endY)}
-        c ${-AW / 8}, ${AH / 2}, ${-AW / 4}, ${AH + -AW / 4}, ${-AW / 2}, ${AH}
-          0, 0, 0, 0, ${AW / 2}, ${-AW / 4}
-          0, 0, 0, 0, ${AW / 2}, ${AW / 4}
-          ${-AW / 4}, ${-AW / 4}, ${(3 * -AW) / 8}, ${-AH / 2}, ${-AW /
-          2}, ${-AH}
-        `,
-        style: {
-          fill: args.color,
-          transformOrigin: `${scaleX * (offsetX + args.endX)}px ${scaleY *
-            (offsetY - args.endY)}px`,
-          transform: `rotate(${Math.atan(
-            (args.endX - args.startX) / (args.endY - args.startY)
-          )}rad)`,
-        },
-      })
+      return arrowView(
+        args.endX,
+        args.endY,
+        Math.atan((args.endX - args.startX) / (args.endY - args.startY))
+      )
+    }
+  }
+
+  function startFormView() {
+    if (args.startForm === 'arrow') {
+      return arrowView(
+        args.startX,
+        args.startY,
+        Math.PI +
+          Math.atan((args.endX - args.startX) / (args.endY - args.startY))
+      )
     }
   }
 
@@ -74,8 +89,16 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       scaleX * (offsetX + p[0]),
       scaleY * (offsetY - p[1]),
     ])
+    const length = distance(points[0], points[1])
+    if (args.startForm === 'arrow') {
+      const factor = (length - AH / 2) / length
+
+      points[0] = [
+        points[1][0] + (points[0][0] - points[1][0]) * factor,
+        points[1][1] + (points[0][1] - points[1][1]) * factor,
+      ]
+    }
     if (args.endForm === 'arrow') {
-      const length = distance(points[0], points[1])
       const factor = (length - AH / 2) / length
 
       points[1] = [
@@ -95,7 +118,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       },
     })
   }
-  return [lineView(), endFormView(), labelView()]
+  return [lineView(), startFormView(), endFormView(), labelView()]
 }
 
 module.exports = {

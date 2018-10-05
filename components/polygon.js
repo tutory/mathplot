@@ -11,9 +11,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   )
   return m('path', {
     d: `M ${args.points
-      .concat([args.points[0]])
       .map(p => [scaleX * (offsetX + p[0]), scaleY * (offsetY - p[1])].join())
-      .join(' ')}`,
+      .join(' ')} Z`,
     style: {
       strokeWidth: args.strokeWidth,
       stroke: args.stroke,
