@@ -50,7 +50,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return arrowView(
         scaleX * (offsetX + args.endX),
         scaleY * (offsetY - args.endY),
-        Math.atan((args.endX - args.startX) / (args.endY - args.startY)),
+        Math.atan(
+          (scaleX * (args.endX - args.startX)) /
+            (scaleY * (args.endY - args.startY))
+        ),
         args.color
       )
     }
@@ -62,7 +65,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         scaleX * (offsetX + args.startX),
         scaleY * (offsetY - args.startY),
         Math.PI +
-          Math.atan((args.endX - args.startX) / (args.endY - args.startY)),
+          Math.atan(
+            (scaleX * (args.endX - args.startX)) /
+              (scaleY * (args.endY - args.startY))
+          ),
         args.color
       )
     }

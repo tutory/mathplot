@@ -21,6 +21,7 @@ function sin(angle) {
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
   const offsetAngle = 90
+  const arcScaleY = args.keepAspect ? scaleX : scaleY
 
   function fillView() {
     if (!args.fill) {
@@ -33,10 +34,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleY * (offsetY - args.centerY)}
         l
         ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
-        ${scaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
+        ${arcScaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
         A
         ${scaleX * args.radius}
-        ${scaleY * args.radius}
+        ${arcScaleY * args.radius}
         0
         0
         0
@@ -44,10 +45,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           (offsetX +
             args.centerX +
             sin(offsetAngle + args.endAngle) * args.radius)}
-        ${scaleY *
-          (offsetY -
-            args.centerY +
-            cos(offsetAngle + args.endAngle) * args.radius)}
+        ${scaleY * (offsetY - args.centerY) +
+          arcScaleY * cos(offsetAngle + args.endAngle) * args.radius}
         Z
       `,
       style: {
@@ -65,10 +64,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleY * (offsetY - args.centerY)}
         m
         ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
-        ${scaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
+        ${arcScaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
         A
         ${scaleX * args.radius}
-        ${scaleY * args.radius}
+        ${arcScaleY * args.radius}
         0
         0
         0
@@ -76,10 +75,8 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
           (offsetX +
             args.centerX +
             sin(offsetAngle + args.endAngle) * args.radius)}
-        ${scaleY *
-          (offsetY -
-            args.centerY +
-            cos(offsetAngle + args.endAngle) * args.radius)}
+        ${scaleY * (offsetY - args.centerY) +
+          arcScaleY * cos(offsetAngle + args.endAngle) * args.radius}
 
       `,
       style: {
@@ -101,7 +98,9 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       'text',
       {
         x: scaleX * (offsetX + args.centerX + sin(centerAngle) * middleRadius),
-        y: scaleY * (offsetY - args.centerY + cos(centerAngle) * middleRadius),
+        y:
+          scaleY * (offsetY - args.centerY) +
+          arcScaleY * cos(centerAngle) * middleRadius,
         style: {
           fill: args.color,
           stroke: 'none',
@@ -116,19 +115,20 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function endFormView() {
     if (args.endForm === 'arrow') {
       const x =
-        scaleY *
+        scaleX *
         (offsetX +
           args.centerX +
           sin(offsetAngle + args.endAngle) * args.radius)
       const y =
-        scaleY *
-        (offsetY -
-          args.centerY +
-          cos(offsetAngle + args.endAngle) * args.radius)
+        scaleY * (offsetY - args.centerY) +
+        arcScaleY * cos(offsetAngle + args.endAngle) * args.radius
       return arrowView(
         x,
         y,
-        (2 * offsetAngle + 10 / args.radius + args.endAngle) * (Math.PI / 180),
+        (2 * offsetAngle +
+          (10 / args.radius) * (scaleY / scaleX) +
+          args.endAngle) *
+          (Math.PI / 180),
         args.color
       )
     }
