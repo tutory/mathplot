@@ -2,7 +2,7 @@ const m = require('mithril')
 const { arrowView, arrowLength } = require('./forms')
 
 const MARGIN = 10
-
+const RAD_FACTOR = 180 / Math.PI
 const px = x => `${x}px`
 
 function distance(a, b) {
@@ -20,6 +20,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     },
     args
   )
+
+  const angle =
+    Math.atan(
+      (scaleX * (args.endX - args.startX)) /
+        (scaleY * (args.endY - args.startY))
+    ) * RAD_FACTOR
 
   function labelView() {
     if (args.label) {
@@ -50,10 +56,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return arrowView(
         scaleX * (offsetX + args.endX),
         scaleY * (offsetY - args.endY),
-        Math.atan(
-          (scaleX * (args.endX - args.startX)) /
-            (scaleY * (args.endY - args.startY))
-        ),
+        angle,
         args.color
       )
     }
@@ -64,11 +67,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return arrowView(
         scaleX * (offsetX + args.startX),
         scaleY * (offsetY - args.startY),
-        Math.PI +
-          Math.atan(
-            (scaleX * (args.endX - args.startX)) /
-              (scaleY * (args.endY - args.startY))
-          ),
+        180 + angle,
         args.color
       )
     }

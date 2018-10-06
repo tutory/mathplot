@@ -13,7 +13,7 @@ function arrowView(x, y, rot, fill) {
     style: {
       fill,
       transformOrigin: `${x}px ${y}px`,
-      transform: `rotate(${rot}rad)`,
+      transform: `rotate(${rot}deg)`,
     },
   })
 }

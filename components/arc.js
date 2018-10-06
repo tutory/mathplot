@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { arrowView } = require('./forms')
+const { arrowView, arrowLength } = require('./forms')
 
 function parse(token) {
   return {
@@ -45,7 +45,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleX * args.radius}
         ${arcScaleY * args.radius}
         0
-        0
+        ${args.startAngle > args.endAngle ? 1 : 0}
         0
         ${scaleX *
           (offsetX +
@@ -63,6 +63,11 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function strokeView() {
+    const endAngle =
+      args.endForm === 'arrow'
+        ? args.endAngle - arrowLength / args.radius
+        : args.endAngle
+
     return m('path', {
       d: `
         M
@@ -75,14 +80,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleX * args.radius}
         ${arcScaleY * args.radius}
         0
-        0
+        ${args.startAngle > args.endAngle ? 1 : 0}
         0
         ${scaleX *
-          (offsetX +
-            args.centerX +
-            sin(offsetAngle + args.endAngle) * args.radius)}
+          (offsetX + args.centerX + sin(offsetAngle + endAngle) * args.radius)}
         ${scaleY * (offsetY - args.centerY) +
-          arcScaleY * cos(offsetAngle + args.endAngle) * args.radius}
+          arcScaleY * cos(offsetAngle + endAngle) * args.radius}
 
       `,
       style: {
@@ -98,7 +101,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     if (!args.label) {
       return
     }
-    const centerAngle = offsetAngle + (args.startAngle + args.endAngle) / 2
+    const centerAngle =
+      offsetAngle +
+      (args.startAngle + args.endAngle) / 2 +
+      (args.startAngle > args.endAngle ? 180 : 0)
     const distance = clamp(
       args.radius * 0.5,
       args.radius * 0.8,
@@ -135,10 +141,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return arrowView(
         x,
         y,
-        (2 * offsetAngle +
-          (10 / args.radius) * (scaleY / scaleX) +
-          args.endAngle) *
-          (Math.PI / 180),
+        (10 / args.radius) * (scaleY / scaleX) - args.endAngle,
         args.color
       )
     }
