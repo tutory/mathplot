@@ -12,6 +12,12 @@ function parse(token) {
   }
 }
 
+function clamp(min, max, x) {
+  if (x < min) return min
+  if (x > max) return max
+  return x
+}
+
 function cos(angle) {
   return Math.cos(angle * (Math.PI / 180))
 }
@@ -93,14 +99,18 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return
     }
     const centerAngle = offsetAngle + (args.startAngle + args.endAngle) / 2
-    const middleRadius = args.radius / 2
+    const distance = clamp(
+      args.radius * 0.5,
+      args.radius * 0.8,
+      args.radius * (30 / (args.endAngle - args.startAngle))
+    )
     return m(
       'text',
       {
-        x: scaleX * (offsetX + args.centerX + sin(centerAngle) * middleRadius),
+        x: scaleX * (offsetX + args.centerX + sin(centerAngle) * distance),
         y:
           scaleY * (offsetY - args.centerY) +
-          arcScaleY * cos(centerAngle) * middleRadius,
+          arcScaleY * cos(centerAngle) * distance,
         style: {
           fill: args.color,
           stroke: 'none',
