@@ -1,4 +1,5 @@
 const m = require('mithril')
+const { arrowView } = require('./forms')
 
 function parse(token) {
   return {
@@ -31,7 +32,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleX * (offsetX + args.centerX)}
         ${scaleY * (offsetY - args.centerY)}
         l
-        ${scaleY * (sin(offsetAngle + args.startAngle) * args.radius)}
+        ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
         ${scaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
         A
         ${scaleX * args.radius}
@@ -63,7 +64,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         ${scaleX * (offsetX + args.centerX)}
         ${scaleY * (offsetY - args.centerY)}
         m
-        ${scaleY * (sin(offsetAngle + args.startAngle) * args.radius)}
+        ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
         ${scaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
         A
         ${scaleX * args.radius}
@@ -112,7 +113,28 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     )
   }
 
-  return [fillView(), strokeView(), labelView()]
+  function endFormView() {
+    if (args.endForm === 'arrow') {
+      const x =
+        scaleY *
+        (offsetX +
+          args.centerX +
+          sin(offsetAngle + args.endAngle) * args.radius)
+      const y =
+        scaleY *
+        (offsetY -
+          args.centerY +
+          cos(offsetAngle + args.endAngle) * args.radius)
+      return arrowView(
+        x,
+        y,
+        (2 * offsetAngle + 10 / args.radius + args.endAngle) * (Math.PI / 180),
+        args.color
+      )
+    }
+  }
+
+  return [fillView(), strokeView(), endFormView(), labelView()]
 }
 
 module.exports = {
