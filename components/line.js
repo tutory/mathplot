@@ -1,8 +1,7 @@
 const m = require('mithril')
+const { arrowView, arrowLength } = require('./forms')
 
 const MARGIN = 10
-const AW = 10
-const AH = 20
 
 const px = x => `${x}px`
 
@@ -46,29 +45,13 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     }
   }
 
-  function arrowView(x, y, rot) {
-    return m('path', {
-      d: `M ${scaleX * (offsetX + x)},${scaleY * (offsetY - y)}
-      c ${-AW / 8}, ${AH / 2}, ${-AW / 4}, ${AH + -AW / 4}, ${-AW / 2}, ${AH}
-        0, 0, 0, 0, ${AW / 2}, ${-AW / 4}
-        0, 0, 0, 0, ${AW / 2}, ${AW / 4}
-        ${-AW / 4}, ${-AW / 4}, ${(3 * -AW) / 8}, ${-AH / 2}, ${-AW / 2}, ${-AH}
-      `,
-      style: {
-        fill: args.color,
-        transformOrigin: `${scaleX * (offsetX + x)}px ${scaleY *
-          (offsetY - y)}px`,
-        transform: `rotate(${rot}rad)`,
-      },
-    })
-  }
-
   function endFormView() {
     if (args.endForm === 'arrow') {
       return arrowView(
-        args.endX,
-        args.endY,
-        Math.atan((args.endX - args.startX) / (args.endY - args.startY))
+        scaleX * (offsetX + args.endX),
+        scaleY * (offsetY - args.endY),
+        Math.atan((args.endX - args.startX) / (args.endY - args.startY)),
+        args.color
       )
     }
   }
@@ -76,10 +59,11 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function startFormView() {
     if (args.startForm === 'arrow') {
       return arrowView(
-        args.startX,
-        args.startY,
+        scaleX * (offsetX + args.startX),
+        scaleY * (offsetY - args.startY),
         Math.PI +
-          Math.atan((args.endX - args.startX) / (args.endY - args.startY))
+          Math.atan((args.endX - args.startX) / (args.endY - args.startY)),
+        args.color
       )
     }
   }
@@ -91,7 +75,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     ])
     const length = distance(points[0], points[1])
     if (args.startForm === 'arrow') {
-      const factor = (length - AH / 2) / length
+      const factor = (length - arrowLength / 2) / length
 
       points[0] = [
         points[1][0] + (points[0][0] - points[1][0]) * factor,
@@ -99,7 +83,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       ]
     }
     if (args.endForm === 'arrow') {
-      const factor = (length - AH / 2) / length
+      const factor = (length - arrowLength / 2) / length
 
       points[1] = [
         points[0][0] + (points[1][0] - points[0][0]) * factor,
