@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { times } = require('../utils')
+const { times, last } = require('../utils')
 
 function groupPoints(points, minY, maxY) {
   return points.reduce(
@@ -18,10 +18,11 @@ function groupPoints(points, minY, maxY) {
 }
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
+  const labelX = (args.startX + args.endX) / 2
   args = Object.assign(
     {
-      labelX: 0,
-      labelY: args.fn(args.labelX || 0),
+      labelX,
+      labelY: args.fn(labelX) / (args.fill ? 2 : 1),
       color: 'green',
       strokeDasharray: null,
     },
@@ -34,6 +35,13 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       args.fn(args.startX + i / scaleX),
     ])
     const pointGroups = groupPoints(points, args.startY, args.endY)
+    if (args.fill) {
+      pointGroups.map(points => {
+        points.unshift([points[0][0], 0])
+        points.push([last(points)[0], 0])
+      })
+    }
+
     return pointGroups.map(points =>
       m('path', {
         d:
@@ -44,10 +52,11 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
                 `${scaleX * (point[0] + offsetX)},${scaleY *
                   (offsetY - point[1])}`
             )
-            .join(' '),
+            .join(' ') +
+          (args.fill ? 'Z' : ''),
         style: {
           strokeWidth: '2px',
-          fill: 'none',
+          fill: args.fill || 'none',
           stroke: args.color,
           strokeDasharray: args.strokeDasharray,
         },
@@ -68,6 +77,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
             alignmentBaseline: 'middle',
             fontStyle: 'italic',
             fontWeight: 'bold',
+            stroke: args.fill && 'none',
           },
         },
         args.label
