@@ -109,15 +109,13 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     )
     const [x, y] = getPointByAngle(centerAngle, distance)
     return m(
-      'text',
+      'text.verticalCenter.horizontalCenter',
       {
         x,
         y,
         style: {
           fill: args.color,
           stroke: 'none',
-          textAnchor: 'middle',
-          alignmentBaseline: 'middle',
         },
       },
       args.label

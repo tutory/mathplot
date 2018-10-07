@@ -60,14 +60,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       const isAxisLabel = x === last(steps)
       return [
         m(
-          'text',
+          'text.horizontalCenter.verticalTop',
           {
             x: scaleX * (offsetX + x),
             y: scaleY * offsetY + MARGIN,
-            style: {
-              textAnchor: 'middle',
-              alignmentBaseline: 'hanging',
-            },
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelX : args.labelXView(x)
@@ -103,14 +99,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       const isAxisLabel = y === last(steps)
       return [
         m(
-          'text',
+          'text.verticalCenter.horizontalRight',
           {
             y: scaleY * (offsetY - y),
             x: scaleX * offsetX - 2 * MARGIN,
-            style: {
-              textAnchor: 'end',
-              alignmentBaseline: 'middle',
-            },
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelY : args.labelYView(y)
@@ -166,14 +158,10 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
 
   function originView() {
     return m(
-      'text',
+      'text.horizontalRight.verticalTop',
       {
         y: scaleY * offsetY + MARGIN,
         x: scaleX * offsetX - MARGIN,
-        style: {
-          textAnchor: 'end',
-          alignmentBaseline: 'hanging',
-        },
       },
       'O'
     )

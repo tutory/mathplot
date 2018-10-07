@@ -28,27 +28,28 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     ) * RAD_FACTOR
 
   function labelView() {
-    if (args.label) {
-      isHorizontalish =
-        Math.abs(args.endX - args.startX) > Math.abs(args.endY - args.startY)
-      return m(
-        'text',
-        {
-          x:
-            scaleX * (offsetX + (args.startX + args.endX) / 2) +
-            (isHorizontalish ? 0 : MARGIN),
-          y:
-            scaleY * (offsetY - (args.startY + args.endY) / 2) +
-            (isHorizontalish ? MARGIN : 0),
-          style: {
-            fill: args.color,
-            textAnchor: isHorizontalish ? 'end' : 'start',
-            alignmentBaseline: isHorizontalish ? 'hanging' : 'baseline',
-          },
+    if (!args.label) return
+    isHorizontalish =
+      Math.abs(args.endX - args.startX) > Math.abs(args.endY - args.startY)
+    const x =
+      scaleX * (offsetX + (args.startX + args.endX) / 2) +
+      (isHorizontalish ? 0 : MARGIN)
+    const y =
+      scaleY * (offsetY - (args.startY + args.endY) / 2) +
+      (isHorizontalish ? MARGIN : 0)
+    return m(
+      'text',
+      {
+        x,
+        y,
+        style: {
+          fill: args.color,
+          textAnchor: isHorizontalish ? 'end' : 'start',
         },
-        args.label
-      )
-    }
+        className: isHorizontalish ? 'verticalTop' : 'verticalBottom',
+      },
+      args.label
+    )
   }
 
   function endFormView() {

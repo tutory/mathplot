@@ -23,14 +23,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function labelView() {
     if (args.label) {
       return m(
-        'text',
+        'text.verticalCenter.horizontalCenter',
         {
           x: scaleX * (offsetX + args.centerX),
           y: scaleY * (offsetY - args.centerY),
           style: {
             fill: args.stroke,
-            textAnchor: 'middle',
-            alignmentBaseline: 'middle',
             stroke: 'none',
           },
         },
