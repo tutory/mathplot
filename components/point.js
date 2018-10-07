@@ -1,6 +1,14 @@
 const m = require('mithril')
+const {
+  crossView,
+  crossSize,
+  circleView,
+  circleRadius,
+  dotView,
+  dotRadius,
+} = require('./forms')
 
-const WIDTH = 10
+const MARGIN = 5
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
   args = Object.assign(
@@ -12,49 +20,19 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     args
   )
 
-  function crossView() {
-    return [
-      m('path', {
-        d: `
-          M ${scaleX * (offsetX + args.x) - WIDTH / 2},${scaleY *
-          (offsetY - args.y) -
-          WIDTH / 2}
-          l ${WIDTH},${WIDTH}
-        `,
-        style: crossLineStyle,
-      }),
-      m('path', {
-        d: `
-          M ${scaleX * (offsetX + args.x) + WIDTH / 2},${scaleY *
-          (offsetY - args.y) -
-          WIDTH / 2}
-          l ${-WIDTH},${WIDTH}
-        `,
-        style: crossLineStyle,
-      }),
-    ]
-  }
-
-  function circleView() {
-    const isDot = args.form === 'dot'
-    return m('circle', {
-      cx: scaleX * (offsetX + args.x),
-      cy: scaleY * (offsetY - args.y),
-      r: WIDTH / (isDot ? 4 : 2),
-      style: Object.assign({}, crossLineStyle, {
-        fill: isDot ? args.color : 'none',
-      }),
-    })
-  }
-
   function labelView() {
     if (args.label) {
-      const isDot = args.form === 'dot'
-      return m(
-        'text',
+      const gapSize =
         {
-          x: scaleX * (offsetX + args.x) + WIDTH / (isDot ? 2 : 1),
-          y: scaleY * (offsetY - args.y) + WIDTH / 2,
+          dot: dotRadius,
+          circle: circleRadius,
+          cross: crossSize / 2,
+        }[args.form] + MARGIN
+      return m(
+        'text.verticalCenter',
+        {
+          x: scaleX * (offsetX + args.x) + gapSize,
+          y: scaleY * (offsetY - args.y),
           style: {
             fill: args.color,
           },
@@ -64,12 +42,20 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     }
   }
 
-  const crossLineStyle = {
-    strokeWidth: args.strokeWidth,
-    stroke: args.color,
-    fill: 'none',
-  }
-  return [args.form === 'cross' ? crossView() : circleView(), labelView()]
+  const formView = {
+    cross: crossView,
+    circle: circleView,
+    dot: dotView,
+  }[args.form]
+
+  return [
+    formView(
+      scaleX * (offsetX + args.x),
+      scaleY * (offsetY - args.y),
+      args.color
+    ),
+    labelView(),
+  ]
 }
 
 module.exports = {

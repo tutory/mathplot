@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { arrowView, arrowLength } = require('./forms')
+const { formView, arrowLength } = require('./forms')
 
 function parse(token) {
   return {
@@ -28,6 +28,8 @@ function sin(angle) {
 function render(offsetX, offsetY, scaleX, scaleY, args) {
   const offsetAngle = 90
   const arcScaleY = args.keepAspect ? scaleX : scaleY
+  const [startArcX, startArcY] = getPointByAngle(args.startAngle)
+  const [endArcX, endArcY] = getPointByAngle(args.endAngle)
 
   function fillView() {
     if (!args.fill) {
@@ -38,21 +40,17 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         M
         ${scaleX * (offsetX + args.centerX)}
         ${scaleY * (offsetY - args.centerY)}
-        l
-        ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
-        ${arcScaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
+        L
+        ${startArcX}
+        ${startArcY}
         A
         ${scaleX * args.radius}
         ${arcScaleY * args.radius}
         0
         ${args.startAngle > args.endAngle ? 1 : 0}
         0
-        ${scaleX *
-          (offsetX +
-            args.centerX +
-            sin(offsetAngle + args.endAngle) * args.radius)}
-        ${scaleY * (offsetY - args.centerY) +
-          arcScaleY * cos(offsetAngle + args.endAngle) * args.radius}
+        ${endArcX}
+        ${endArcY}
         Z
       `,
       style: {
@@ -63,30 +61,30 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function strokeView() {
+    const startAngle =
+      args.startForm === 'arrow'
+        ? args.startAngle + arrowLength / args.radius
+        : args.startAngle
     const endAngle =
       args.endForm === 'arrow'
         ? args.endAngle - arrowLength / args.radius
         : args.endAngle
+    const [startArcX, startArcY] = getPointByAngle(startAngle)
+    const [endArcX, endArcY] = getPointByAngle(endAngle)
 
     return m('path', {
       d: `
         M
-        ${scaleX * (offsetX + args.centerX)}
-        ${scaleY * (offsetY - args.centerY)}
-        m
-        ${scaleX * (sin(offsetAngle + args.startAngle) * args.radius)}
-        ${arcScaleY * (cos(offsetAngle + args.startAngle) * args.radius)}
+        ${startArcX}
+        ${startArcY}
         A
         ${scaleX * args.radius}
         ${arcScaleY * args.radius}
         0
         ${args.startAngle > args.endAngle ? 1 : 0}
         0
-        ${scaleX *
-          (offsetX + args.centerX + sin(offsetAngle + endAngle) * args.radius)}
-        ${scaleY * (offsetY - args.centerY) +
-          arcScaleY * cos(offsetAngle + endAngle) * args.radius}
-
+        ${endArcX}
+        ${endArcY}
       `,
       style: {
         stroke: args.color,
@@ -102,7 +100,6 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       return
     }
     const centerAngle =
-      offsetAngle +
       (args.startAngle + args.endAngle) / 2 +
       (args.startAngle > args.endAngle ? 180 : 0)
     const distance = clamp(
@@ -110,13 +107,12 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       args.radius * 0.8,
       args.radius * (30 / (args.endAngle - args.startAngle))
     )
+    const [x, y] = getPointByAngle(centerAngle, distance)
     return m(
       'text',
       {
-        x: scaleX * (offsetX + args.centerX + sin(centerAngle) * distance),
-        y:
-          scaleY * (offsetY - args.centerY) +
-          arcScaleY * cos(centerAngle) * distance,
+        x,
+        y,
         style: {
           fill: args.color,
           stroke: 'none',
@@ -128,26 +124,35 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     )
   }
 
-  function endFormView() {
-    if (args.endForm === 'arrow') {
-      const x =
-        scaleX *
-        (offsetX +
-          args.centerX +
-          sin(offsetAngle + args.endAngle) * args.radius)
-      const y =
-        scaleY * (offsetY - args.centerY) +
-        arcScaleY * cos(offsetAngle + args.endAngle) * args.radius
-      return arrowView(
-        x,
-        y,
-        (10 / args.radius) * (scaleY / scaleX) - args.endAngle,
-        args.color
-      )
-    }
+  function getPointByAngle(angle, radius = args.radius) {
+    return [
+      scaleX * (offsetX + args.centerX + sin(offsetAngle + angle) * radius),
+      scaleY * (offsetY - args.centerY) +
+        arcScaleY * cos(offsetAngle + angle) * radius,
+    ]
   }
 
-  return [fillView(), strokeView(), endFormView(), labelView()]
+  function endFormView() {
+    if (!args.endForm) return
+    const angleCorrection =
+      args.endForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
+    const [x, y] = getPointByAngle(args.endAngle)
+    return formView(args.endForm, x, y, args.color, {
+      angle: angleCorrection - args.endAngle,
+    })
+  }
+
+  function startFormView() {
+    if (!args.startForm) return
+    const angleCorrection =
+      args.startForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
+    const [x, y] = getPointByAngle(args.startAngle)
+    return formView(args.startForm, x, y, args.color, {
+      angle: 180 - angleCorrection - args.startAngle,
+    })
+  }
+
+  return [fillView(), strokeView(), startFormView(), endFormView(), labelView()]
 }
 
 module.exports = {

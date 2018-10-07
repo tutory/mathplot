@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { arrowView, arrowLength } = require('./forms')
+const { formView, arrowLength } = require('./forms')
 
 const MARGIN = 10
 const RAD_FACTOR = 180 / Math.PI
@@ -52,25 +52,23 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function endFormView() {
-    if (args.endForm === 'arrow') {
-      return arrowView(
-        scaleX * (offsetX + args.endX),
-        scaleY * (offsetY - args.endY),
-        angle,
-        args.color
-      )
-    }
+    return formView(
+      args.endForm,
+      scaleX * (offsetX + args.endX),
+      scaleY * (offsetY - args.endY),
+      args.color,
+      { angle }
+    )
   }
 
   function startFormView() {
-    if (args.startForm === 'arrow') {
-      return arrowView(
-        scaleX * (offsetX + args.startX),
-        scaleY * (offsetY - args.startY),
-        180 + angle,
-        args.color
-      )
-    }
+    return formView(
+      args.startForm,
+      scaleX * (offsetX + args.startX),
+      scaleY * (offsetY - args.startY),
+      args.color,
+      { angle: 180 + angle }
+    )
   }
 
   function lineView() {
