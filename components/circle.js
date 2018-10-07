@@ -12,25 +12,60 @@ function parse(token) {
 }
 
 function render(offsetX, offsetY, scaleX, scaleY, args) {
-  return m('ellipse', {
-    cx: scaleX * (offsetX + args.centerX),
-    cy: scaleY * (offsetY - args.centerY),
-    rx: scaleX * args.radius,
-    ry: scaleY * args.radius,
-    style: {
-      stroke: args.stroke,
-      strokeWidth: args.strokeWidth,
-      strokeDasharray: args.strokeDasharray,
-      fill: args.fill,
+  args = Object.assign(
+    {
+      radiusX: args.radius || 1,
+      radiusY: args.radius || args.radiusX || 1,
     },
-  })
+    args
+  )
+
+  function labelView() {
+    if (args.label) {
+      return m(
+        'text',
+        {
+          x: scaleX * (offsetX + args.centerX),
+          y: scaleY * (offsetY - args.centerY),
+          style: {
+            fill: args.stroke,
+            textAnchor: 'middle',
+            alignmentBaseline: 'middle',
+            stroke: 'none',
+          },
+        },
+        args.label
+      )
+    }
+  }
+
+  function ellipseView() {
+    return m('ellipse', {
+      cx: scaleX * (offsetX + args.centerX),
+      cy: scaleY * (offsetY - args.centerY),
+      rx: scaleX * args.radiusX,
+      ry: scaleY * args.radiusY,
+      style: {
+        stroke: args.stroke,
+        strokeWidth: args.strokeWidth,
+        strokeDasharray: args.strokeDasharray,
+        fill: args.fill,
+      },
+    })
+  }
+
+  return [ellipseView(), labelView()]
 }
 
 module.exports = {
   parse,
   render,
-  getMinX: ({ args }) => args.centerX - args.radius - args.strokeWidth,
-  getMaxX: ({ args }) => args.centerX + args.radius + args.strokeWidth,
-  getMinY: ({ args }) => args.centerY - args.radius - args.strokeWidth,
-  getMaxY: ({ args }) => args.centerY + args.radius + args.strokeWidth,
+  getMinX: ({ args }) =>
+    args.centerX - (args.radius || args.radiusX) - args.strokeWidth,
+  getMaxX: ({ args }) =>
+    args.centerX + (args.radius || args.radiusY) + args.strokeWidth,
+  getMinY: ({ args }) =>
+    args.centerY - (args.radius || args.radiusX) - args.strokeWidth,
+  getMaxY: ({ args }) =>
+    args.centerY + (args.radius || args.radiusY) + args.strokeWidth,
 }
