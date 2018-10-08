@@ -1,14 +1,15 @@
 const m = require('mithril')
+const { clozeView } = require('./forms')
 
 function sum(arr) {
   return arr.reduce((sum, v) => sum + v, 0)
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: '2px',
-      stroke: 'orange',
+      color: 'orange',
       fill: 'none',
     },
     args
@@ -21,31 +22,27 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
         .join(' ')} Z`,
       style: {
         strokeWidth: args.strokeWidth,
-        stroke: args.stroke,
+        stroke: args.color,
         fill: args.fill,
       },
     })
   }
 
   function labelView() {
-    if (args.label) {
-      const centerX = sum(args.points.map(p => p[0])) / args.points.length
-      const centerY = sum(args.points.map(p => p[1])) / args.points.length
-      return m(
-        'text',
-        {
-          x: scaleX * (offsetX + centerX),
-          y: scaleY * (offsetY - centerY),
-          style: {
-            fill: args.stroke,
-            textAnchor: 'middle',
-            alignmentBaseline: 'middle',
-            stroke: 'none',
-          },
-        },
-        args.label
-      )
-    }
+    if (!args.label) return
+    const labelX =
+      args.labelX || sum(args.points.map(p => p[0])) / args.points.length
+    const x = scaleX * (offsetX + labelX)
+    const labelY =
+      args.labelY || sum(args.points.map(p => p[1])) / args.points.length
+    const y = scaleY * (offsetY - labelY)
+
+    return clozeView(x, y, args.label, {
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+    })
   }
 
   return [pathView(), labelView()]

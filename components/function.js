@@ -1,5 +1,6 @@
 const m = require('mithril')
 const { times, last } = require('../utils')
+const { clozeView } = require('./forms')
 
 function groupPoints(points, minY, maxY) {
   return points.reduce(
@@ -17,7 +18,7 @@ function groupPoints(points, minY, maxY) {
   )
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   const labelX = (args.startX + args.endX) / 2
   args = Object.assign(
     {
@@ -65,22 +66,19 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function labelView() {
-    if (args.label) {
-      return m(
-        'text.verticalCenter.horizontalCenter',
-        {
-          x: scaleX * (offsetX + args.labelX),
-          y: scaleY * (offsetY - args.labelY),
-          style: {
-            fill: args.color,
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            stroke: args.fill && 'none',
-          },
-        },
-        args.label
-      )
-    }
+    if (!args.label) return
+    const x = scaleX * (offsetX + args.labelX)
+    const y = scaleY * (offsetY - args.labelY)
+    return clozeView(x, y, args.label, {
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+      style: {
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+      },
+    })
   }
 
   return [graphView(), labelView()]

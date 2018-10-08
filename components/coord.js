@@ -31,7 +31,7 @@ function parse(token) {
   }
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY }) {
   args = Object.assign(
     {
       labelX: 'x',
@@ -133,27 +133,33 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   }
 
   function xAxisView() {
-    return lineView(offsetX, offsetY, scaleX, scaleY, {
-      startX: args.startX,
-      startY: 0,
-      endX: args.endX,
-      endY: 0,
-      endForm: 'arrow',
-      color: 'black',
-      strokeWidth: 1,
-    })
+    return lineView(
+      {
+        startX: args.startX,
+        startY: 0,
+        endX: args.endX,
+        endY: 0,
+        endForm: 'arrow',
+        color: 'black',
+        strokeWidth: 1,
+      },
+      { offsetX, offsetY, scaleX, scaleY }
+    )
   }
 
   function yAxisView() {
-    return lineView(offsetX, offsetY, scaleX, scaleY, {
-      startX: 0,
-      startY: args.startY,
-      endX: 0,
-      endY: args.endY,
-      endForm: 'arrow',
-      color: 'black',
-      strokeWidth: 1,
-    })
+    return lineView(
+      {
+        startX: 0,
+        startY: args.startY,
+        endX: 0,
+        endY: args.endY,
+        endForm: 'arrow',
+        color: 'black',
+        strokeWidth: 1,
+      },
+      { offsetX, offsetY, scaleX, scaleY }
+    )
   }
 
   function originView() {

@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { formView, arrowLength } = require('./forms')
+const { clozeView, formView, arrowLength } = require('./forms')
 
 function parse(token) {
   return {
@@ -25,7 +25,7 @@ function sin(angle) {
   return Math.sin(angle * (Math.PI / 180))
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   const offsetAngle = 90
   const arcScaleY = args.keepAspect ? scaleX : scaleY
   const [startArcX, startArcY] = getPointByAngle(args.startAngle)
@@ -108,18 +108,13 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       args.radius * (30 / (args.endAngle - args.startAngle))
     )
     const [x, y] = getPointByAngle(centerAngle, distance)
-    return m(
-      'text.verticalCenter.horizontalCenter',
-      {
-        x,
-        y,
-        style: {
-          fill: args.color,
-          stroke: 'none',
-        },
-      },
-      args.label
-    )
+
+    return clozeView(x, y, args.label, {
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+    })
   }
 
   function getPointByAngle(angle, radius = args.radius) {

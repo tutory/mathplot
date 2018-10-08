@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { formView, arrowLength } = require('./forms')
+const { clozeView, formView, arrowLength } = require('./forms')
 
 const MARGIN = 10
 const RAD_FACTOR = 180 / Math.PI
@@ -9,7 +9,7 @@ function distance(a, b) {
   return Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2))
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: 2,
@@ -37,19 +37,14 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
     const y =
       scaleY * (offsetY - (args.startY + args.endY) / 2) +
       (isHorizontalish ? MARGIN : 0)
-    return m(
-      'text',
-      {
-        x,
-        y,
-        style: {
-          fill: args.color,
-          textAnchor: isHorizontalish ? 'end' : 'start',
-        },
-        className: isHorizontalish ? 'verticalTop' : 'verticalBottom',
-      },
-      args.label
-    )
+    return clozeView(x, y, args.label, {
+      vertical: isHorizontalish ? 'top' : 'bottom',
+      horizontal: isHorizontalish ? 'right' : 'left',
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+    })
   }
 
   function endFormView() {

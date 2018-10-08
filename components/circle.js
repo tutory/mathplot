@@ -1,4 +1,5 @@
 const m = require('mithril')
+const { clozeView } = require('./forms')
 
 function parse(token) {
   return {
@@ -11,7 +12,7 @@ function parse(token) {
   }
 }
 
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       radiusX: args.radius || 1,
@@ -21,20 +22,15 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   )
 
   function labelView() {
-    if (args.label) {
-      return m(
-        'text.verticalCenter.horizontalCenter',
-        {
-          x: scaleX * (offsetX + args.centerX),
-          y: scaleY * (offsetY - args.centerY),
-          style: {
-            fill: args.stroke,
-            stroke: 'none',
-          },
-        },
-        args.label
-      )
-    }
+    if (!args.label) return
+    const x = scaleX * (offsetX + args.centerX)
+    const y = scaleY * (offsetY - args.centerY)
+    return clozeView(x, y, args.label, {
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+    })
   }
 
   function ellipseView() {
@@ -44,7 +40,7 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
       rx: scaleX * args.radiusX,
       ry: scaleY * args.radiusY,
       style: {
-        stroke: args.stroke,
+        stroke: args.color,
         strokeWidth: args.strokeWidth,
         strokeDasharray: args.strokeDasharray,
         fill: args.fill,

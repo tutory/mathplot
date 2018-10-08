@@ -1,19 +1,14 @@
 const m = require('mithril')
+const { clozeView } = require('./forms')
 
-const alignmentMap = {
-  top: 'hanging',
-  middle: 'middle',
-  bottom: 'baseline',
-}
-
-function render(offsetX, offsetY, scaleX, scaleY, args) {
+function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       color: 'black',
       text: '',
       angle: 0,
-      verticalAnchor: 'middle',
-      horizontalAnchor: 'middle',
+      verticalAnchor: 'center',
+      horizontalAnchor: 'center',
     },
     args
   )
@@ -21,21 +16,18 @@ function render(offsetX, offsetY, scaleX, scaleY, args) {
   function labelView() {
     const x = scaleX * (offsetX + args.x)
     const y = scaleY * (offsetY - args.y)
-    return m(
-      'text',
-      {
-        x,
-        y,
-        style: {
-          fill: args.color,
-          textAnchor: args.horizontalAnchor,
-          alignmentBaseline: alignmentMap[args.verticalAnchor],
-          transformOrigin: `${x}px ${y}px`,
-          transform: `rotate(${args.rotate}deg)`,
-        },
+    return clozeView(x, y, args.label, {
+      color: args.color,
+      autoBackground: !args.fill,
+      cloze: args.cloze,
+      showSolution,
+      vertical: args.verticalAnchor,
+      horizontal: args.horizontalAnchor,
+      style: {
+        transformOrigin: `${x}px ${y}px`,
+        transform: `rotate(${args.rotate}deg)`,
       },
-      args.label
-    )
+    })
   }
 
   return [labelView()]

@@ -14,8 +14,19 @@ function last(arr) {
   return arr[arr.length - 1]
 }
 
+function cls(def, separator = ' ') {
+  let classes
+  for (const cls in def) {
+    if (def[cls]) {
+      classes = classes == null ? cls : classes + separator + cls
+    }
+  }
+  return classes || ''
+}
+
 module.exports = {
   toInt,
   times,
   last,
+  cls,
 }
