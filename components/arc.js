@@ -107,7 +107,9 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
       args.radius * 0.8,
       args.radius * (30 / (args.endAngle - args.startAngle))
     )
-    const [x, y] = getPointByAngle(centerAngle, distance)
+    let [x, y] = getPointByAngle(centerAngle, distance)
+    x = args.labelX == null ? x : scaleX * (offsetX + args.labelX)
+    y = args.labelY == null ? y : scaleY * (offsetY + args.labelY)
 
     return clozeView(x, y, args.label, {
       color: args.color,

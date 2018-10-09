@@ -1,4 +1,3 @@
-const m = require('mithril')
 const {
   formView,
   clozeView,
@@ -29,8 +28,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
       }[args.form] + MARGIN
     const x = scaleX * (offsetX + args.x) + gapSize
     const y = scaleY * (offsetY - args.y)
+    const labelX = args.labelX == null ? x : scaleX * (offsetX + args.labelX)
+    const labelY = args.labelY == null ? y : scaleY * (offsetY - args.labelY)
 
-    return clozeView(x, y, args.label, {
+    return clozeView(labelX, labelY, args.label, {
       color: args.color,
       horizontal: 'left',
       cloze: args.cloze,

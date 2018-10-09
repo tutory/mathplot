@@ -31,12 +31,13 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
     if (!args.label) return
     isHorizontalish =
       Math.abs(args.endX - args.startX) > Math.abs(args.endY - args.startY)
-    const x =
-      scaleX * (offsetX + (args.startX + args.endX) / 2) +
-      (isHorizontalish ? 0 : MARGIN)
-    const y =
-      scaleY * (offsetY - (args.startY + args.endY) / 2) +
-      (isHorizontalish ? MARGIN : 0)
+    const labelX =
+      args.labelX == null ? (args.startX + args.endX) / 2 : args.labelX
+    const labelY =
+      args.labelY == null ? (args.startY + args.endY) / 2 : args.labelY
+
+    const x = scaleX * (offsetX + labelX) + (isHorizontalish ? 0 : MARGIN)
+    const y = scaleY * (offsetY - labelY) + (isHorizontalish ? MARGIN : 0)
     return clozeView(x, y, args.label, {
       vertical: isHorizontalish ? 'top' : 'bottom',
       horizontal: isHorizontalish ? 'right' : 'left',

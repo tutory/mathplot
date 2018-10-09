@@ -23,8 +23,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
 
   function labelView() {
     if (!args.label) return
-    const x = scaleX * (offsetX + args.centerX)
-    const y = scaleY * (offsetY - args.centerY)
+    const labelX = args.labelX == null ? args.centerX : args.labelX
+    const labelY = args.labelY == null ? args.centerY : args.labelY
+    const x = scaleX * (offsetX + labelX)
+    const y = scaleY * (offsetY - labelY)
     return clozeView(x, y, args.label, {
       color: args.color,
       autoBackground: !args.fill,
