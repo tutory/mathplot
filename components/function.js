@@ -3,22 +3,24 @@ const { times, last, clamp } = require('../utils')
 const { clozeView } = require('./forms')
 
 function groupPoints(points, minY, maxY) {
-  return points.reduce(
-    (groups, point) => {
-      const y = point[1]
-      const currentGroup = groups[groups.length - 1]
-      if (y > minY && y < maxY) {
-        currentGroup.push(point)
-      } else if (currentGroup.length !== 0) {
-        groups.push([])
-      }
-      return groups
-    },
-    [[]]
-  )
+  return points
+    .reduce(
+      (groups, point) => {
+        const y = point[1]
+        const currentGroup = groups[groups.length - 1]
+        if (y > minY && y < maxY) {
+          currentGroup.push(point)
+        } else if (currentGroup.length !== 0) {
+          groups.push([])
+        }
+        return groups
+      },
+      [[]]
+    )
+    .filter(p => p.length)
 }
 
-function render(args, { offScaleX, offScaleY, scaleX, showSolution }) {
+function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
   const labelX =
     args.labelX == null ? (args.startX + args.endX) / 2 : args.labelX
   args = Object.assign(
@@ -89,7 +91,7 @@ function render(args, { offScaleX, offScaleY, scaleX, showSolution }) {
 }
 
 module.exports = {
-  render,
+  view,
   getMinX: ({ args }) => args.startX,
   getMaxX: ({ args }) => args.endX,
   getMinY: ({ args }) => args.startY,

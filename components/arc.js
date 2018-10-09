@@ -2,17 +2,6 @@ const m = global.HYPER_SCRIPT
 const { clozeView, formView, arrowLength } = require('./forms')
 const { clamp } = require('../utils')
 
-function parse(token) {
-  return {
-    x: toInt(token[0]),
-    y: toInt(token[1]),
-    radius: toInt(token[2]),
-    stroke: token[3] || 'black',
-    strokeWidth: toInt(token[4]) || 1,
-    fill: token[5] || null,
-  }
-}
-
 function cos(angle) {
   return Math.cos(angle * (Math.PI / 180))
 }
@@ -20,7 +9,7 @@ function sin(angle) {
   return Math.sin(angle * (Math.PI / 180))
 }
 
-function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
+function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   const offsetAngle = 90
   const arcScaleY = args.keepAspect ? scaleX : scaleY
   const [startArcX, startArcY] = getPointByAngle(args.startAngle)
@@ -154,8 +143,7 @@ function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 }
 
 module.exports = {
-  parse,
-  render,
+  view,
   getMinX: ({ args }) => args.x - args.radius - args.strokeWidth,
   getMaxX: ({ args }) => args.x + args.radius + args.strokeWidth,
   getMinY: ({ args }) => args.y - args.radius - args.strokeWidth,

@@ -5,7 +5,7 @@ function sum(arr) {
   return arr.reduce((sum, v) => sum + v, 0)
 }
 
-function render(args, { offScaleX, offScaleY, showSolution }) {
+function view(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: '2px',
@@ -49,7 +49,7 @@ function render(args, { offScaleX, offScaleY, showSolution }) {
 }
 
 module.exports = {
-  render,
+  view,
   getMinX: ({ args }) => Math.min(...args.points.map(p => p[0])),
   getMinY: ({ args }) => Math.min(...args.points.map(p => p[1])),
   getMaxX: ({ args }) => Math.max(...args.points.map(p => p[0])),

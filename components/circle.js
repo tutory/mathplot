@@ -1,18 +1,7 @@
 const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
 
-function parse(token) {
-  return {
-    x: toInt(token[0]),
-    y: toInt(token[1]),
-    radius: toInt(token[2]),
-    stroke: token[3] || 'black',
-    strokeWidth: toInt(token[4]) || 1,
-    fill: token[5] || null,
-  }
-}
-
-function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
+function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       radiusX: args.radius || 1,
@@ -54,14 +43,13 @@ function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 }
 
 module.exports = {
-  parse,
-  render,
+  view,
   getMinX: ({ args }) =>
-    args.x - (args.radius || args.radiusX) - args.strokeWidth,
+    args.x - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
   getMaxX: ({ args }) =>
-    args.x + (args.radius || args.radiusY) + args.strokeWidth,
+    args.x + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
   getMinY: ({ args }) =>
-    args.y - (args.radius || args.radiusX) - args.strokeWidth,
+    args.y - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
   getMaxY: ({ args }) =>
-    args.y + (args.radius || args.radiusY) + args.strokeWidth,
+    args.y + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
 }

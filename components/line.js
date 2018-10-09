@@ -9,7 +9,7 @@ function distance(a, b) {
   return Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2))
 }
 
-function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
+function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: 2,
@@ -106,7 +106,7 @@ function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 }
 
 module.exports = {
-  render,
+  view,
   getMinX: ({ args }) => Math.min(args.startX, args.endX),
   getMinY: ({ args }) => Math.min(args.startY, args.endY),
   getMaxX: ({ args }) => Math.max(args.startX, args.endX),

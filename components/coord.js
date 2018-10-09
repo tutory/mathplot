@@ -1,6 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { last } = require('../utils')
-const lineView = require('./line').render
+const lineView = require('./line').view
 
 const MARGIN = 5
 
@@ -19,19 +19,7 @@ function range0(from, to, step = 1) {
   return arr
 }
 
-function parse(token) {
-  return {
-    startX: Math.min(0, toInt(token[0])),
-    startY: Math.min(0, toInt(token[1])),
-    endX: Math.max(0, toInt(token[2])),
-    endY: Math.max(0, toInt(token[3])),
-    stepGridX: toInt(token[4]) || 1,
-    stepGridY: toInt(token[5]) || 1,
-    grid: true,
-  }
-}
-
-function render(args, { offScaleX, offScaleY, scaleX, scaleY }) {
+function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   args = Object.assign(
     {
       labelX: 'x',
@@ -185,8 +173,7 @@ function render(args, { offScaleX, offScaleY, scaleX, scaleY }) {
 }
 
 module.exports = {
-  parse,
-  render,
+  view,
   getMinX: ({ args }) => args.startX,
   getMaxX: ({ args }) => args.endX,
   getMinY: ({ args }) => args.startY,

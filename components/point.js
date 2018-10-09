@@ -8,7 +8,7 @@ const {
 
 const MARGIN = 5
 
-function render(args, { offScaleX, offScaleY, showSolution }) {
+function view(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: '1px',
@@ -46,7 +46,7 @@ function render(args, { offScaleX, offScaleY, showSolution }) {
 }
 
 module.exports = {
-  render,
+  view,
   getMinX: ({ args }) => args.x,
   getMinY: ({ args }) => args.y,
   getMaxX: ({ args }) => args.x,

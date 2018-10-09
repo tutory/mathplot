@@ -36,14 +36,14 @@ module.exports = function view(
   const offsetX = -minX
   const offsetY = maxY
   const renderedShapes = shapes.map(shape =>
-    types[shape.type].render(shape.args, {
+    types[shape.type].view(shape.args, {
       offsetX,
       offsetY,
       scaleX,
       scaleY,
       offScaleX: x => scaleX * (offsetX + x),
       offScaleY: y => scaleY * (offsetY - y),
-      showSolution: showSolution == null ? true : false,
+      showSolution: showSolution !== false ? true : false,
     })
   )
 
@@ -98,3 +98,5 @@ module.exports = function view(
     ),
   ]
 }
+
+module.exports.types = types
