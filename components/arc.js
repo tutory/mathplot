@@ -1,4 +1,4 @@
-const m = require('mithril')
+const m = global.HYPER_SCRIPT
 const { clozeView, formView, arrowLength } = require('./forms')
 const { clamp } = require('../utils')
 

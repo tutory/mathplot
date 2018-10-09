@@ -1,4 +1,4 @@
-const m = require('mithril')
+const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
 
 function sum(arr) {

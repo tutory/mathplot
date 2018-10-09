@@ -1,4 +1,4 @@
-const m = require('mithril')
+const m = global.HYPER_SCRIPT
 const { cls } = require('../utils')
 
 const DEFAULT_ARROW_LENGTH = 20

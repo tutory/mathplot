@@ -1,17 +1,15 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "description": "example usage with mithril",
-  "main": "index.html",
+  "name": "mathplot",
+  "version": "0.1.0",
+  "description": "hyper script based math plotter",
+  "main": "index.js",
   "scripts": {
-    "start": "./node_modules/parcel-bundler/bin/cli.js index.html"
+    "start": "./node_modules/parcel-bundler/bin/cli.js example/index.html"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "mithril": "1.1.6"
-  },
+  "license": "MIT",
   "devDependencies": {
+    "mithril": "1.1.6",
     "parcel-bundler": "1.6.2"
   }
 }
