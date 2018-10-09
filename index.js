@@ -1,7 +1,7 @@
 const m = require('mithril')
 
 const dimensions = {
-  startX: -3,
+  startX: -10,
   startY: -10,
   endX: 10,
   endY: 10,
@@ -22,35 +22,12 @@ shapes = [
       dimensions
     ),
   },
-  // {
-  //   type: 'function',
-  //   args: Object.assign(
-  //     {
-  //       fn: x => Math.tan(x),
-  //       color: 'green',
-  //     },
-  //     dimensions
-  //   ),
-  // },
   {
     type: 'function',
     args: Object.assign(
       {
         fn: x => Math.sin(x),
         label: 'sin(x)',
-        labelX: (x, y) =>
-          m(
-            'foreignObject',
-            { x, y, width: 100, height: 100 },
-            m(
-              'body',
-              {
-                xmlns: 'http://www.w3.org/1999/xhtml',
-              },
-              m('div', 'huhu')
-            )
-          ),
-        labelX: 5,
         color: 'turquoise',
       },
       dimensions
@@ -75,8 +52,8 @@ shapes = [
       {
         fn: x => 1 / x,
         label: 'f(x)',
+        labelX: 1,
         cloze: true,
-        labelY: 1,
         color: 'blue',
         strokeDasharray: '8 4 2 4',
       },
@@ -86,8 +63,8 @@ shapes = [
   {
     type: 'circle',
     args: {
-      centerX: 5,
-      centerY: 5,
+      x: 5,
+      y: 5,
       radius: 1,
       fill: 'silver',
       color: 'black',
@@ -99,8 +76,8 @@ shapes = [
   {
     type: 'ellipse',
     args: {
-      centerX: 3,
-      centerY: 7,
+      x: 3,
+      y: 7,
       radiusX: 1,
       radiusY: 0.5,
       label: 'A',
@@ -204,8 +181,8 @@ shapes = [
   {
     type: 'arc',
     args: {
-      centerX: 8,
-      centerY: 5,
+      x: 8,
+      y: 5,
       radius: 2,
       startAngle: 70,
       endAngle: 90,
@@ -220,8 +197,8 @@ shapes = [
   {
     type: 'arc',
     args: {
-      centerX: 8,
-      centerY: 2,
+      x: 8,
+      y: 2,
       radius: 1,
       startAngle: 220,
       endAngle: 180,
@@ -259,26 +236,30 @@ m.mount(document.body, {
       return { type, args: types[type].parse(args) }
     })
 
-    const minX = shapes.reduce((minX, shape) => {
-      return Math.min(minX, types[shape.type].getMinX(shape))
-    }, Infinity)
-    const maxX = shapes.reduce((maxX, shape) => {
-      return Math.max(maxX, types[shape.type].getMaxX(shape))
-    }, -Infinity)
-    const minY = shapes.reduce((minY, shape) => {
-      return Math.min(minY, types[shape.type].getMinY(shape))
-    }, Infinity)
-    const maxY = shapes.reduce((maxY, shape) => {
-      return Math.max(maxY, types[shape.type].getMaxY(shape))
-    }, -Infinity)
+    const minX = Math.min(
+      ...shapes.map(shape => types[shape.type].getMinX(shape))
+    )
+    const maxX = Math.max(
+      ...shapes.map(shape => types[shape.type].getMaxX(shape))
+    )
+    const minY = Math.min(
+      ...shapes.map(shape => types[shape.type].getMinY(shape))
+    )
+    const maxY = Math.max(
+      ...shapes.map(shape => types[shape.type].getMaxY(shape))
+    )
     const scaleX = 50
     const scaleY = 50
+    const offsetX = -minX
+    const offsetY = maxY
     const renderedShapes = shapes.map(shape =>
       types[shape.type].render(shape.args, {
-        offsetX: -minX,
-        offsetY: maxY,
+        offsetX,
+        offsetY,
         scaleX,
         scaleY,
+        offScaleX: x => scaleX * (offsetX + x),
+        offScaleY: y => scaleY * (offsetY - y),
         showSolution: state.showSolution,
       })
     )
@@ -320,8 +301,8 @@ m.mount(document.body, {
           alignment-baseline: baseline;
         }
         .cloze {
-          fill: #DDDDDD;
-          fill-opacity: 0.8;
+          fill: white;
+          fill-opacity: 1;
         }
       `
       ),

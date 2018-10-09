@@ -1,7 +1,7 @@
 const m = require('mithril')
 const { clozeView } = require('./forms')
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
       color: 'black',
@@ -14,8 +14,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   )
 
   function labelView() {
-    const x = scaleX * (offsetX + args.x)
-    const y = scaleY * (offsetY - args.y)
+    const x = offScaleX(args.x)
+    const y = offScaleY(args.y)
     return clozeView(x, y, args.label, {
       color: args.color,
       autoBackground: !args.fill,

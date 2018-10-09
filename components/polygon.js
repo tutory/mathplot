@@ -5,7 +5,7 @@ function sum(arr) {
   return arr.reduce((sum, v) => sum + v, 0)
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: '2px',
@@ -18,7 +18,7 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   function pathView() {
     return m('path', {
       d: `M ${args.points
-        .map(p => [scaleX * (offsetX + p[0]), scaleY * (offsetY - p[1])].join())
+        .map(p => [offScaleX(p[0]), offScaleY(p[1])].join())
         .join(' ')} Z`,
       style: {
         strokeWidth: args.strokeWidth,
@@ -32,10 +32,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
     if (!args.label) return
     const labelX =
       args.labelX || sum(args.points.map(p => p[0])) / args.points.length
-    const x = scaleX * (offsetX + labelX)
+    const x = offScaleX(labelX)
     const labelY =
       args.labelY || sum(args.points.map(p => p[1])) / args.points.length
-    const y = scaleY * (offsetY - labelY)
+    const y = offScaleY(labelY)
 
     return clozeView(x, y, args.label, {
       color: args.color,

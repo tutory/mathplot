@@ -1,5 +1,5 @@
 const m = require('mithril')
-const { times, last } = require('../utils')
+const { times, last, clamp } = require('../utils')
 const { clozeView } = require('./forms')
 
 function groupPoints(points, minY, maxY) {
@@ -18,12 +18,17 @@ function groupPoints(points, minY, maxY) {
   )
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
-  const labelX = (args.startX + args.endX) / 2
+function render(args, { offScaleX, offScaleY, scaleX, showSolution }) {
+  const labelX =
+    args.labelX == null ? (args.startX + args.endX) / 2 : args.labelX
   args = Object.assign(
     {
       labelX,
-      labelY: args.fn(labelX) / (args.fill ? 2 : 1),
+      labelY: clamp(
+        args.startY + 1,
+        args.endY - 1,
+        args.fn(labelX) / (args.fill ? 2 : 1)
+      ),
       color: 'green',
       strokeDasharray: null,
     },
@@ -48,11 +53,7 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
         d:
           'M' +
           points
-            .map(
-              point =>
-                `${scaleX * (point[0] + offsetX)},${scaleY *
-                  (offsetY - point[1])}`
-            )
+            .map(point => `${offScaleX(point[0])},${offScaleY(point[1])}`)
             .join(' ') +
           (args.fill ? 'Z' : ''),
         style: {
@@ -67,18 +68,21 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
 
   function labelView() {
     if (!args.label) return
-    const x = scaleX * (offsetX + args.labelX)
-    const y = scaleY * (offsetY - args.labelY)
-    return clozeView(x, y, args.label, {
-      color: args.color,
-      autoBackground: !args.fill,
-      cloze: args.cloze,
-      showSolution,
-      style: {
-        fontStyle: 'italic',
-        fontWeight: 'bold',
-      },
-    })
+    return clozeView(
+      offScaleX(args.labelX),
+      offScaleY(args.labelY),
+      args.label,
+      {
+        color: args.color,
+        autoBackground: !args.fill,
+        cloze: args.cloze,
+        showSolution,
+        style: {
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+        },
+      }
+    )
   }
 
   return [graphView(), labelView()]

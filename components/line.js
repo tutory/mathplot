@@ -9,7 +9,7 @@ function distance(a, b) {
   return Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2))
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: 2,
@@ -36,8 +36,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
     const labelY =
       args.labelY == null ? (args.startY + args.endY) / 2 : args.labelY
 
-    const x = scaleX * (offsetX + labelX) + (isHorizontalish ? 0 : MARGIN)
-    const y = scaleY * (offsetY - labelY) + (isHorizontalish ? MARGIN : 0)
+    const x = offScaleX(labelX) + (isHorizontalish ? 0 : MARGIN)
+    const y = offScaleY(labelY) + (isHorizontalish ? MARGIN : 0)
     return clozeView(x, y, args.label, {
       vertical: isHorizontalish ? 'top' : 'bottom',
       horizontal: isHorizontalish ? 'right' : 'left',
@@ -51,8 +51,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   function endFormView() {
     return formView(
       args.endForm,
-      scaleX * (offsetX + args.endX),
-      scaleY * (offsetY - args.endY),
+      offScaleX(args.endX),
+      offScaleY(args.endY),
       args.color,
       { angle }
     )
@@ -61,8 +61,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   function startFormView() {
     return formView(
       args.startForm,
-      scaleX * (offsetX + args.startX),
-      scaleY * (offsetY - args.startY),
+      offScaleX(args.startX),
+      offScaleY(args.startY),
       args.color,
       { angle: 180 + angle }
     )
@@ -70,8 +70,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
 
   function lineView() {
     let points = [[args.startX, args.startY], [args.endX, args.endY]].map(p => [
-      scaleX * (offsetX + p[0]),
-      scaleY * (offsetY - p[1]),
+      offScaleX(p[0]),
+      offScaleY(p[1]),
     ])
     const length = distance(points[0], points[1])
     if (args.startForm === 'arrow') {

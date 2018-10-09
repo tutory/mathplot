@@ -8,7 +8,7 @@ const {
 
 const MARGIN = 5
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
       strokeWidth: '1px',
@@ -26,10 +26,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
         circle: circleRadius,
         cross: crossSize / 2,
       }[args.form] + MARGIN
-    const x = scaleX * (offsetX + args.x) + gapSize
-    const y = scaleY * (offsetY - args.y)
-    const labelX = args.labelX == null ? x : scaleX * (offsetX + args.labelX)
-    const labelY = args.labelY == null ? y : scaleY * (offsetY - args.labelY)
+    const x = offScaleX(args.x) + gapSize
+    const y = offScaleY(args.y)
+    const labelX = args.labelX == null ? x : offScaleX(args.labelX)
+    const labelY = args.labelY == null ? y : offScaleY(args.labelY)
 
     return clozeView(labelX, labelY, args.label, {
       color: args.color,
@@ -40,12 +40,7 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
   }
 
   return [
-    formView(
-      args.form,
-      scaleX * (offsetX + args.x),
-      scaleY * (offsetY - args.y),
-      args.color
-    ),
+    formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color),
     labelView(),
   ]
 }

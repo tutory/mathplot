@@ -24,9 +24,16 @@ function cls(def, separator = ' ') {
   return classes || ''
 }
 
+function clamp(min, max, x) {
+  if (x < min) return min
+  if (x > max) return max
+  return x
+}
+
 module.exports = {
   toInt,
   times,
   last,
   cls,
+  clamp,
 }

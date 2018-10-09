@@ -1,21 +1,16 @@
 const m = require('mithril')
 const { clozeView, formView, arrowLength } = require('./forms')
+const { clamp } = require('../utils')
 
 function parse(token) {
   return {
-    centerX: toInt(token[0]),
-    centerY: toInt(token[1]),
+    x: toInt(token[0]),
+    y: toInt(token[1]),
     radius: toInt(token[2]),
     stroke: token[3] || 'black',
     strokeWidth: toInt(token[4]) || 1,
     fill: token[5] || null,
   }
-}
-
-function clamp(min, max, x) {
-  if (x < min) return min
-  if (x > max) return max
-  return x
 }
 
 function cos(angle) {
@@ -25,11 +20,39 @@ function sin(angle) {
   return Math.sin(angle * (Math.PI / 180))
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   const offsetAngle = 90
   const arcScaleY = args.keepAspect ? scaleX : scaleY
   const [startArcX, startArcY] = getPointByAngle(args.startAngle)
   const [endArcX, endArcY] = getPointByAngle(args.endAngle)
+
+  args = Object.assign({}, args)
+
+  function getLabelPos() {
+    if (args.labelX != null && args.labelY != null) {
+      return [args.labelX, args.labelY]
+    }
+    const centerAngle =
+      (args.startAngle + args.endAngle) / 2 +
+      (args.startAngle > args.endAngle ? 180 : 0)
+    const distance = clamp(
+      args.radius * 0.5,
+      args.radius * 0.8,
+      args.radius * (30 / (args.endAngle - args.startAngle))
+    )
+    const pos = getPointByAngle(centerAngle, distance)
+    return [
+      args.labelX == null ? pos[0] : args.labelX,
+      args.labelY == null ? pos[1] : args.labelY,
+    ]
+  }
+
+  function getPointByAngle(angle, radius = args.radius) {
+    return [
+      offScaleX(args.x) + scaleX * sin(offsetAngle + angle) * radius,
+      offScaleY(args.y) + arcScaleY * cos(offsetAngle + angle) * radius,
+    ]
+  }
 
   function fillView() {
     if (!args.fill) {
@@ -38,8 +61,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
     return m('path', {
       d: `
         M
-        ${scaleX * (offsetX + args.centerX)}
-        ${scaleY * (offsetY - args.centerY)}
+        ${offScaleX(args.x)}
+        ${offScaleY(args.y)}
         L
         ${startArcX}
         ${startArcY}
@@ -99,32 +122,12 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
     if (!args.label) {
       return
     }
-    const centerAngle =
-      (args.startAngle + args.endAngle) / 2 +
-      (args.startAngle > args.endAngle ? 180 : 0)
-    const distance = clamp(
-      args.radius * 0.5,
-      args.radius * 0.8,
-      args.radius * (30 / (args.endAngle - args.startAngle))
-    )
-    let [x, y] = getPointByAngle(centerAngle, distance)
-    x = args.labelX == null ? x : scaleX * (offsetX + args.labelX)
-    y = args.labelY == null ? y : scaleY * (offsetY + args.labelY)
-
-    return clozeView(x, y, args.label, {
+    return clozeView(...getLabelPos(), args.label, {
       color: args.color,
       autoBackground: !args.fill,
       cloze: args.cloze,
       showSolution,
     })
-  }
-
-  function getPointByAngle(angle, radius = args.radius) {
-    return [
-      scaleX * (offsetX + args.centerX + sin(offsetAngle + angle) * radius),
-      scaleY * (offsetY - args.centerY) +
-        arcScaleY * cos(offsetAngle + angle) * radius,
-    ]
   }
 
   function endFormView() {
@@ -153,8 +156,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
 module.exports = {
   parse,
   render,
-  getMinX: ({ args }) => args.centerX - args.radius - args.strokeWidth,
-  getMaxX: ({ args }) => args.centerX + args.radius + args.strokeWidth,
-  getMinY: ({ args }) => args.centerY - args.radius - args.strokeWidth,
-  getMaxY: ({ args }) => args.centerY + args.radius + args.strokeWidth,
+  getMinX: ({ args }) => args.x - args.radius - args.strokeWidth,
+  getMaxX: ({ args }) => args.x + args.radius + args.strokeWidth,
+  getMinY: ({ args }) => args.y - args.radius - args.strokeWidth,
+  getMaxY: ({ args }) => args.y + args.radius + args.strokeWidth,
 }

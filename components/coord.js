@@ -31,7 +31,7 @@ function parse(token) {
   }
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY }) {
+function render(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   args = Object.assign(
     {
       labelX: 'x',
@@ -62,17 +62,17 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
         m(
           'text.horizontalCenter.verticalTop',
           {
-            x: scaleX * (offsetX + x),
-            y: scaleY * offsetY + MARGIN,
+            x: offScaleX(x),
+            y: offScaleY(0) + MARGIN,
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelX : args.labelXView(x)
         ),
         m('line', {
-          x1: scaleX * (offsetX + x),
-          y1: scaleY * offsetY + MARGIN,
-          x2: scaleX * (offsetX + x),
-          y2: scaleY * offsetY,
+          x1: offScaleX(x),
+          y1: offScaleY(0) + MARGIN,
+          x2: offScaleX(x),
+          y2: offScaleY(0),
           style: axisStyle,
         }),
       ]
@@ -83,10 +83,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
     return range0(args.startX, args.endX, args.stepGridX).map(x => {
       return [
         m('line', {
-          x1: scaleX * (offsetX + x),
-          y1: scaleY * (offsetY - args.endY),
-          x2: scaleX * (offsetX + x),
-          y2: scaleY * (offsetY - args.startY),
+          x1: offScaleX(x),
+          y1: offScaleY(args.endY),
+          x2: offScaleX(x),
+          y2: offScaleY(args.startY),
           style: gridStyle,
         }),
       ]
@@ -101,17 +101,17 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
         m(
           'text.verticalCenter.horizontalRight',
           {
-            y: scaleY * (offsetY - y),
-            x: scaleX * offsetX - 2 * MARGIN,
+            x: offScaleX(0) - 2 * MARGIN,
+            y: offScaleY(y),
             className: isAxisLabel ? 'axisLabel' : '',
           },
           isAxisLabel ? args.labelY : args.labelYView(y)
         ),
         m('line', {
-          y1: scaleY * (offsetY - y),
-          x1: scaleX * offsetX - MARGIN,
-          y2: scaleY * (offsetY - y),
-          x2: scaleX * offsetX,
+          x1: offScaleX(0) - MARGIN,
+          y1: offScaleY(y),
+          x2: offScaleX(0),
+          y2: offScaleY(y),
           style: axisStyle,
         }),
       ]
@@ -122,10 +122,10 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
     return range0(args.startY, args.endY, args.stepGridY).map(y => {
       return [
         m('line', {
-          y1: scaleY * (offsetY - y),
-          x1: scaleX * (offsetX + args.endX),
-          y2: scaleY * (offsetY - y),
-          x2: scaleX * (offsetX + args.startX),
+          y1: offScaleY(y),
+          x1: offScaleX(args.endX),
+          y2: offScaleY(y),
+          x2: offScaleX(args.startX),
           style: gridStyle,
         }),
       ]
@@ -143,7 +143,7 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
         color: 'black',
         strokeWidth: 1,
       },
-      { offsetX, offsetY, scaleX, scaleY }
+      { offScaleX, offScaleY, scaleX, scaleY }
     )
   }
 
@@ -158,7 +158,7 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
         color: 'black',
         strokeWidth: 1,
       },
-      { offsetX, offsetY, scaleX, scaleY }
+      { offScaleX, offScaleY, scaleX, scaleY }
     )
   }
 
@@ -166,8 +166,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY }) {
     return m(
       'text.horizontalRight.verticalTop',
       {
-        y: scaleY * offsetY + MARGIN,
-        x: scaleX * offsetX - MARGIN,
+        y: offScaleY(0) + MARGIN,
+        x: offScaleX(0) - MARGIN,
       },
       'O'
     )

@@ -3,8 +3,8 @@ const { clozeView } = require('./forms')
 
 function parse(token) {
   return {
-    centerX: toInt(token[0]),
-    centerY: toInt(token[1]),
+    x: toInt(token[0]),
+    y: toInt(token[1]),
     radius: toInt(token[2]),
     stroke: token[3] || 'black',
     strokeWidth: toInt(token[4]) || 1,
@@ -12,21 +12,21 @@ function parse(token) {
   }
 }
 
-function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
+function render(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
       radiusX: args.radius || 1,
       radiusY: args.radius || args.radiusX || 1,
+      labelX: args.x,
+      labelY: args.y,
     },
     args
   )
 
   function labelView() {
     if (!args.label) return
-    const labelX = args.labelX == null ? args.centerX : args.labelX
-    const labelY = args.labelY == null ? args.centerY : args.labelY
-    const x = scaleX * (offsetX + labelX)
-    const y = scaleY * (offsetY - labelY)
+    const x = offScaleX(args.labelX)
+    const y = offScaleY(args.labelY)
     return clozeView(x, y, args.label, {
       color: args.color,
       autoBackground: !args.fill,
@@ -37,8 +37,8 @@ function render(args, { offsetX, offsetY, scaleX, scaleY, showSolution }) {
 
   function ellipseView() {
     return m('ellipse', {
-      cx: scaleX * (offsetX + args.centerX),
-      cy: scaleY * (offsetY - args.centerY),
+      cx: offScaleX(args.x),
+      cy: offScaleY(args.y),
       rx: scaleX * args.radiusX,
       ry: scaleY * args.radiusY,
       style: {
@@ -57,11 +57,11 @@ module.exports = {
   parse,
   render,
   getMinX: ({ args }) =>
-    args.centerX - (args.radius || args.radiusX) - args.strokeWidth,
+    args.x - (args.radius || args.radiusX) - args.strokeWidth,
   getMaxX: ({ args }) =>
-    args.centerX + (args.radius || args.radiusY) + args.strokeWidth,
+    args.x + (args.radius || args.radiusY) + args.strokeWidth,
   getMinY: ({ args }) =>
-    args.centerY - (args.radius || args.radiusX) - args.strokeWidth,
+    args.y - (args.radius || args.radiusX) - args.strokeWidth,
   getMaxY: ({ args }) =>
-    args.centerY + (args.radius || args.radiusY) + args.strokeWidth,
+    args.y + (args.radius || args.radiusY) + args.strokeWidth,
 }
