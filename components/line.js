@@ -107,8 +107,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) => Math.min(args.startX, args.endX),
-  getMinY: ({ args }) => Math.min(args.startY, args.endY),
-  getMaxX: ({ args }) => Math.max(args.startX, args.endX),
-  getMaxY: ({ args }) => Math.max(args.startY, args.endY),
+  getDimensions: ({ args }) => [
+    Math.min(args.startX, args.endX),
+    Math.max(args.startX, args.endX),
+    Math.min(args.startY, args.endY),
+    Math.max(args.startY, args.endY),
+  ],
 }

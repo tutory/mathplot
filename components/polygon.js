@@ -50,8 +50,10 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) => Math.min(...args.points.map(p => p[0])),
-  getMinY: ({ args }) => Math.min(...args.points.map(p => p[1])),
-  getMaxX: ({ args }) => Math.max(...args.points.map(p => p[0])),
-  getMaxY: ({ args }) => Math.max(...args.points.map(p => p[1])),
+  getDimensions: ({ args }) => [
+    Math.min(...args.points.map(p => p[0])),
+    Math.max(...args.points.map(p => p[0])),
+    Math.min(...args.points.map(p => p[1])),
+    Math.max(...args.points.map(p => p[1])),
+  ],
 }

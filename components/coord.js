@@ -174,8 +174,5 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) => args.startX,
-  getMaxX: ({ args }) => args.endX,
-  getMinY: ({ args }) => args.startY,
-  getMaxY: ({ args }) => args.endY,
+  getDimensions: ({ args }) => [args.startX, args.endX, args.startY, args.endY],
 }

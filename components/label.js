@@ -35,8 +35,5 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) => args.x,
-  getMinY: ({ args }) => args.y,
-  getMaxX: ({ args }) => args.x,
-  getMaxY: ({ args }) => args.y,
+  getDimensions: ({ args }) => [args.x, args.x, args.y, args.y],
 }

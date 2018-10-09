@@ -21,18 +21,11 @@ module.exports = function view(
 ) {
   scaleX = scaleX || ONE_CM_PER_UNIT
   scaleY = scaleY || ONE_CM_PER_UNIT
-  const minX = Math.min(
-    ...shapes.map(shape => types[shape.type].getMinX(shape))
-  )
-  const maxX = Math.max(
-    ...shapes.map(shape => types[shape.type].getMaxX(shape))
-  )
-  const minY = Math.min(
-    ...shapes.map(shape => types[shape.type].getMinY(shape))
-  )
-  const maxY = Math.max(
-    ...shapes.map(shape => types[shape.type].getMaxY(shape))
-  )
+  const dimensions = shapes.map(shape => types[shape.type].getDimensions(shape))
+  const minX = Math.min(...dimensions.map(d => d[0]))
+  const maxX = Math.max(...dimensions.map(d => d[1]))
+  const minY = Math.min(...dimensions.map(d => d[2]))
+  const maxY = Math.max(...dimensions.map(d => d[3]))
   const offsetX = -minX
   const offsetY = maxY
   const renderedShapes = shapes.map(shape =>

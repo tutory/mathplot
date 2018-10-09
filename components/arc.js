@@ -144,8 +144,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) => args.x - args.radius - args.strokeWidth,
-  getMaxX: ({ args }) => args.x + args.radius + args.strokeWidth,
-  getMinY: ({ args }) => args.y - args.radius - args.strokeWidth,
-  getMaxY: ({ args }) => args.y + args.radius + args.strokeWidth,
+  getDimensions: ({ args }) => [
+    args.x - args.radius - args.strokeWidth,
+    args.x + args.radius + args.strokeWidth,
+    args.y - args.radius - args.strokeWidth,
+    args.y + args.radius + args.strokeWidth,
+  ],
 }

@@ -44,12 +44,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
 module.exports = {
   view,
-  getMinX: ({ args }) =>
+  getDimensions: ({ args }) => [
     args.x - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
-  getMaxX: ({ args }) =>
     args.x + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
-  getMinY: ({ args }) =>
     args.y - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
-  getMaxY: ({ args }) =>
     args.y + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
+  ],
 }
