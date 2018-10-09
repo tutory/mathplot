@@ -6,6 +6,8 @@ const DEFAULT_CROSS_SIZE = 10
 const DEFAULT_CIRCLE_RADIUS = 5
 const DEFAULT_DOT_RADIUS = 2.5
 
+const CLOZE_VERTICAL_POSITION_CORRECTION = 2
+
 const px = x => `${x}px`
 
 function arrowView(x, y, color, options) {
@@ -175,7 +177,7 @@ function clozeView(x, y, label, options) {
     options.showSolution &&
       textView(
         x + offsetX + width / 2,
-        y + offsetY + height / 2,
+        y + offsetY + height / 2 + CLOZE_VERTICAL_POSITION_CORRECTION,
         label,
         Object.assign({}, options, {
           className: 'clozeText',
