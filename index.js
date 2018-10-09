@@ -12,7 +12,15 @@ const types = {
   label: require('./components/label'),
 }
 
-module.exports = function view(shapes, attrs) {
+const ONE_CM_PER_UNIT = 37.8
+
+module.exports = function view(
+  shapes,
+  { showSolution, scaleX, scaleY },
+  attrs = {}
+) {
+  scaleX = scaleX || ONE_CM_PER_UNIT
+  scaleY = scaleY || ONE_CM_PER_UNIT
   const minX = Math.min(
     ...shapes.map(shape => types[shape.type].getMinX(shape))
   )
@@ -25,8 +33,6 @@ module.exports = function view(shapes, attrs) {
   const maxY = Math.max(
     ...shapes.map(shape => types[shape.type].getMaxY(shape))
   )
-  const scaleX = 50
-  const scaleY = 50
   const offsetX = -minX
   const offsetY = maxY
   const renderedShapes = shapes.map(shape =>
@@ -37,7 +43,7 @@ module.exports = function view(shapes, attrs) {
       scaleY,
       offScaleX: x => scaleX * (offsetX + x),
       offScaleY: y => scaleY * (offsetY - y),
-      showSolution: attrs.showSolution,
+      showSolution: showSolution == null ? true : false,
     })
   )
 
@@ -45,46 +51,42 @@ module.exports = function view(shapes, attrs) {
     m(
       'style',
       `
-        svg {
-          font-family: "Latin Modern Roman", "open sans";
-        }
-        .axisLabel {
+        svg.mathplot .axisLabel {
           font-style: italic;
         }
-        text {
-          font-size: 15px;
+        svg.mathplot text {
           stroke: white;
           stroke-width: 7px;
           paint-order: stroke fill;
           stroke-linecap: round;
           stroke-linejoin: round;
         }
-        text.horizontalLeft {
+        svg.mathplot text.horizontalLeft {
           text-anchor: start;
         }
-        text.horizontalCenter {
+        svg.mathplot text.horizontalCenter {
           text-anchor: middle;
         }
-        text.horizontalRight {
+        svg.mathplot text.horizontalRight {
           text-anchor: end;
         }
-        text.verticalTop {
+        svg.mathplot text.verticalTop {
           alignment-baseline: hanging;
         }
-        text.verticalCenter {
+        svg.mathplot text.verticalCenter {
           alignment-baseline: middle;
         }
-        text.verticalBottom {
+        svg.mathplot text.verticalBottom {
           alignment-baseline: baseline;
         }
-        .cloze {
+        svg.mathplot .cloze {
           fill: white;
           fill-opacity: 1;
         }
       `
     ),
     m(
-      'svg',
+      'svg.mathplot',
       Object.assign(
         {
           width: `${(maxX - minX) * scaleX}px`,
