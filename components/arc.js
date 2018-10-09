@@ -125,7 +125,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       args.endForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
-      angle: angleCorrection - args.endAngle,
+      angle: -90 + angleCorrection - args.endAngle,
     })
   }
 
@@ -135,7 +135,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       args.startForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
     const [x, y] = getPointByAngle(args.startAngle)
     return formView(args.startForm, x, y, args.color, {
-      angle: 180 - angleCorrection - args.startAngle,
+      angle: 90 - angleCorrection - args.startAngle,
     })
   }
 

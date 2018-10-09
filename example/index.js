@@ -124,6 +124,7 @@ shapes = [
       endY: 5,
       color: 'brown',
       endForm: 'arrow',
+      startForm: 'arrow',
     },
   },
   {
@@ -132,8 +133,8 @@ shapes = [
       label: 'U',
       startX: 4,
       startY: -1,
-      endX: 6,
-      endY: 3,
+      endX: 4,
+      endY: -10,
       startForm: 'cross',
       endForm: 'arrow',
       color: 'purple',

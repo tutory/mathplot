@@ -9,6 +9,21 @@ function distance(a, b) {
   return Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2))
 }
 
+function getAngleByVector(x, y) {
+  if (x >= 0 && y >= 0) {
+    return -Math.atan(y / x) * RAD_FACTOR
+  }
+  if (x < 0 && y >= 0) {
+    return Math.atan(y / -x) * RAD_FACTOR - 180
+  }
+  if (x < 0 && y < 0) {
+    return -Math.atan(y / x) * RAD_FACTOR + 180
+  }
+  if (x >= 0 && y < 0) {
+    return Math.atan(-y / x) * RAD_FACTOR
+  }
+}
+
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
     {
@@ -21,11 +36,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     args
   )
 
-  const angle =
-    Math.atan(
-      (scaleX * (args.endX - args.startX)) /
-        (scaleY * (args.endY - args.startY))
-    ) * RAD_FACTOR
+  const angle = getAngleByVector(
+    scaleX * (args.endX - args.startX),
+    scaleY * (args.endY - args.startY)
+  )
 
   function labelView() {
     if (!args.label) return

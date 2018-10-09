@@ -17,10 +17,10 @@ function arrowView(x, y, color, options) {
   )
   return m('path', {
     d: `M ${x} ${y}
-    c ${-w / 8}, ${l / 2}, ${-w / 4}, ${l - w / 4}, ${-w / 2}, ${l}
-      0, 0, 0, 0, ${w / 2}, ${-w / 4}
-      0, 0, 0, 0, ${w / 2}, ${w / 4}
-      ${-w / 4}, ${-w / 4}, ${(3 * -w) / 8}, ${-l / 2}, ${-w / 2}, ${-l}
+      c ${-l / 2}, ${-w / 8}, ${-l + w / 4}, ${-w / 4}, ${-l},${-w / 2}
+        0, 0, 0, 0, ${w / 2}, ${w / 2},
+        0, 0, 0, 0, ${-w / 2}, ${w / 2},
+        ${w / 4}, ${-w / 4}, ${l / 2}, ${(-w * 3) / 8}, ${l}, ${-w / 2}
     `,
     style: {
       fill: color,
@@ -79,8 +79,8 @@ function barView(x, y, color, options) {
   return [
     m('path', {
       d: `
-        M ${x - crossSize / 2},${y}
-        l ${crossSize},${0}
+        M ${x},${y - crossSize / 2}
+        l ${0},${crossSize}
       `,
       style: crossLineStyle,
     }),
