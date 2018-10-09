@@ -12,7 +12,7 @@ const types = {
   label: require('./components/label'),
 }
 
-module.exports = function view(attrs) {
+module.exports = function view(shapes, attrs) {
   const minX = Math.min(
     ...shapes.map(shape => types[shape.type].getMinX(shape))
   )

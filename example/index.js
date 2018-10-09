@@ -218,7 +218,7 @@ shapes = [
 
 m.mount(document.body, {
   view({ state }) {
-    return mathPlot({
+    return mathPlot(shapes, {
       showSolution: state.showSolution,
       onmouseenter: () => (state.showSolution = true),
       onmouseleave: () => (state.showSolution = false),
