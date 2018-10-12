@@ -5,6 +5,7 @@ const {
   circleRadius,
   dotRadius,
 } = require('./forms')
+const { min, max } = require('../utils')
 
 const MARGIN = 5
 
@@ -47,5 +48,10 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 
 module.exports = {
   view,
-  getDimensions: ({ args }) => [args.x, args.x, args.y, args.y],
+  getDimensions: ({ args }) => [
+    min(args.labelX, args.x),
+    max(args.labelX, args.x),
+    min(args.labelY, args.y),
+    max(args.labelY, args.y),
+  ],
 }

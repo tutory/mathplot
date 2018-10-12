@@ -1,5 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { clozeView, formView, arrowLength } = require('./forms')
+const { min, max } = require('../utils')
 
 const MARGIN = 10
 const RAD_FACTOR = 180 / Math.PI
@@ -122,9 +123,9 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    Math.min(args.startX, args.endX),
-    Math.max(args.startX, args.endX),
-    Math.min(args.startY, args.endY),
-    Math.max(args.startY, args.endY),
+    min(args.labelX, args.startX, args.endX),
+    max(args.labelX, args.startX, args.endX),
+    min(args.labelY, args.startY, args.endY),
+    max(args.labelY, args.startY, args.endY),
   ],
 }

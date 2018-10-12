@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { times, last, clamp } = require('../utils')
+const { times, last, clamp, min, max } = require('../utils')
 const { clozeView } = require('./forms')
 
 function groupPoints(points, minY, maxY) {
@@ -95,5 +95,10 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
 
 module.exports = {
   view,
-  getDimensions: ({ args }) => [args.startX, args.endX, args.startY, args.endY],
+  getDimensions: ({ args }) => [
+    min(args.labelX, args.startX),
+    max(args.labelX, args.endX),
+    min(args.labelY, args.startY),
+    max(args.labelY, args.endY),
+  ],
 }

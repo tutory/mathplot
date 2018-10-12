@@ -1,6 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { clozeView, formView, arrowLength } = require('./forms')
-const { clamp } = require('../utils')
+const { clamp, min, max } = require('../utils')
 
 function cos(angle) {
   return Math.cos(angle * (Math.PI / 180))
@@ -148,9 +148,9 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    args.x - args.radius,
-    args.x + args.radius,
-    args.y - args.radius,
-    args.y + args.radius,
+    min(args.labelX, args.x - args.radius),
+    max(args.labelX, args.x + args.radius),
+    min(args.labelY, args.y - args.radius),
+    max(args.labelY, args.y + args.radius),
   ],
 }

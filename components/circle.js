@@ -1,5 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
+const { min, max } = require('../utils')
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   args = Object.assign(
@@ -45,9 +46,9 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    args.x - (args.radius || args.radiusX || 1),
-    args.x + (args.radius || args.radiusY || 1),
-    args.y - (args.radius || args.radiusX || 1),
-    args.y + (args.radius || args.radiusY || 1),
+    min(args.labelX, args.x - (args.radius || args.radiusX || 1)),
+    max(args.labelX, args.x + (args.radius || args.radiusY || 1)),
+    min(args.labelY, args.y - (args.radius || args.radiusX || 1)),
+    max(args.labelY, args.y + (args.radius || args.radiusY || 1)),
   ],
 }

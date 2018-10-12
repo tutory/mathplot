@@ -1,5 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
+const { min, max } = require('../utils')
 
 function sum(arr) {
   return arr.reduce((sum, v) => sum + v, 0)
@@ -51,9 +52,9 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    Math.min(...args.points.map(p => p[0])),
-    Math.max(...args.points.map(p => p[0])),
-    Math.min(...args.points.map(p => p[1])),
-    Math.max(...args.points.map(p => p[1])),
+    min(args.labelX, ...args.points.map(p => p[0])),
+    max(args.labelX, ...args.points.map(p => p[0])),
+    min(args.labelY, ...args.points.map(p => p[1])),
+    max(args.labelY, ...args.points.map(p => p[1])),
   ],
 }

@@ -34,6 +34,14 @@ function penultimate(arr) {
   return arr[arr.length - 2]
 }
 
+function min(...args) {
+  return Math.min(...args.filter(a => a != null))
+}
+
+function max(...args) {
+  return Math.max(...args.filter(a => a != null))
+}
+
 module.exports = {
   toInt,
   times,
@@ -41,4 +49,6 @@ module.exports = {
   cls,
   clamp,
   penultimate,
+  min,
+  max,
 }
