@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { last } = require('../utils')
+const { penultimate } = require('../utils')
 const lineView = require('./line').view
 
 const MARGIN = 5
@@ -45,16 +45,16 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   function xLabelsView() {
     const steps = range0(args.startX, args.endX, args.stepLabelsX)
     return steps.map(x => {
-      const isAxisLabel = x === last(steps)
+      const isAxisUnit = args.unitX && x === penultimate(steps)
       return [
         m(
           'text.horizontalCenter.verticalTop',
           {
             x: offScaleX(x),
             y: offScaleY(0) + MARGIN,
-            className: isAxisLabel ? 'axisLabel' : '',
+            className: isAxisUnit ? 'axisUnit' : '',
           },
-          isAxisLabel ? args.labelX : args.labelXView(x)
+          isAxisUnit ? args.unitX : args.labelXView(x)
         ),
         m('line', {
           x1: offScaleX(x),
@@ -84,16 +84,16 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   function yLabelsView() {
     const steps = range0(args.startY, args.endY, args.stepLabelsY)
     return steps.map(y => {
-      const isAxisLabel = y === last(steps)
+      const isAxisUnit = args.unitY && y === penultimate(steps)
       return [
         m(
           'text.verticalCenter.horizontalRight',
           {
             x: offScaleX(0) - 2 * MARGIN,
             y: offScaleY(y),
-            className: isAxisLabel ? 'axisLabel' : '',
+            className: isAxisUnit ? 'axisUnit' : '',
           },
-          isAxisLabel ? args.labelY : args.labelYView(y)
+          isAxisUnit ? args.unitY : args.labelYView(y)
         ),
         m('line', {
           x1: offScaleX(0) - MARGIN,
@@ -104,6 +104,30 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         }),
       ]
     })
+  }
+
+  function xAxisLabelView() {
+    return m(
+      'text.horizontalRight.verticalTop',
+      {
+        x: offScaleX(args.endX),
+        y: offScaleY(0) + MARGIN,
+        className: 'axisLabel',
+      },
+      args.labelX
+    )
+  }
+
+  function yAxisLabelView() {
+    return m(
+      'text.horizontalRight.verticalTop',
+      {
+        x: offScaleX(0) - MARGIN,
+        y: offScaleY(args.endY),
+        className: 'axisLabel',
+      },
+      args.labelY
+    )
   }
 
   function yGridLinesView() {
@@ -168,6 +192,8 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     yLabelsView(),
     xAxisView(),
     yAxisView(),
+    xAxisLabelView(),
+    yAxisLabelView(),
     originView(),
   ]
 }

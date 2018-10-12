@@ -17,8 +17,9 @@ shapes = [
         stepLabelsY: 1,
         stepGridX: 1,
         stepGridY: 1,
-        grid: true,
         labelY: 'f(x)',
+        labelX: 'x',
+        unitX: 'm',
       },
       dimensions
     ),

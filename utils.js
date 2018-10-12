@@ -30,10 +30,15 @@ function clamp(min, max, x) {
   return x
 }
 
+function penultimate(arr) {
+  return arr[arr.length - 2]
+}
+
 module.exports = {
   toInt,
   times,
   last,
   cls,
   clamp,
+  penultimate,
 }
