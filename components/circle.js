@@ -45,9 +45,9 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    args.x - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
-    args.x + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
-    args.y - (args.radius || args.radiusX || 1) - args.strokeWidth || 0,
-    args.y + (args.radius || args.radiusY || 1) + args.strokeWidth || 0,
+    args.x - (args.radius || args.radiusX || 1),
+    args.x + (args.radius || args.radiusY || 1),
+    args.y - (args.radius || args.radiusX || 1),
+    args.y + (args.radius || args.radiusY || 1),
   ],
 }

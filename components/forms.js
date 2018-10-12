@@ -11,10 +11,13 @@ const CLOZE_VERTICAL_POSITION_CORRECTION = 2
 const px = x => `${x}px`
 
 function arrowView(x, y, color, options) {
+  const scale = 0.5 + (options.scale || 1) * 0.5
+  const angleCorrection = options.radius ? (12 * scale) / options.radius : 0
   const { angle, l, w } = Object.assign(
     { angle: 0, l: DEFAULT_ARROW_LENGTH, w: 10 },
     options
   )
+
   return m('path', {
     d: `M ${x} ${y}
       c ${-l / 2}, ${-w / 8}, ${-l + w / 4}, ${-w / 4}, ${-l},${-w / 2}
@@ -25,7 +28,10 @@ function arrowView(x, y, color, options) {
     style: {
       fill: color,
       transformOrigin: `${x}px ${y}px`,
-      transform: `rotate(${angle}deg)`,
+      transform: `rotate(${angle +
+        (options.end
+          ? angleCorrection
+          : -angleCorrection)}deg) scale(${scale})`,
     },
   })
 }

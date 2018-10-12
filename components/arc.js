@@ -75,11 +75,13 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   function strokeView() {
     const startAngle =
       args.startForm === 'arrow'
-        ? args.startAngle + arrowLength / args.radius
+        ? args.startAngle +
+          (arrowLength * (0.5 + args.strokeWidth * 0.5)) / args.radius
         : args.startAngle
     const endAngle =
       args.endForm === 'arrow'
-        ? args.endAngle - arrowLength / args.radius
+        ? args.endAngle -
+          (arrowLength * (0.5 + args.strokeWidth * 0.5)) / args.radius
         : args.endAngle
     const [startArcX, startArcY] = getPointByAngle(startAngle)
     const [endArcX, endArcY] = getPointByAngle(endAngle)
@@ -121,21 +123,22 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
   function endFormView() {
     if (!args.endForm) return
-    const angleCorrection =
-      args.endForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
-      angle: -90 + angleCorrection - args.endAngle,
+      angle: -90 - args.endAngle,
+      radius: args.radius,
+      scale: args.strokeWidth,
+      end: true,
     })
   }
 
   function startFormView() {
     if (!args.startForm) return
-    const angleCorrection =
-      args.startForm === 'arrow' ? (10 / args.radius) * (scaleY / scaleX) : 0
     const [x, y] = getPointByAngle(args.startAngle)
     return formView(args.startForm, x, y, args.color, {
-      angle: 90 - angleCorrection - args.startAngle,
+      angle: 90 - args.startAngle,
+      radius: args.radius,
+      scale: args.strokeWidth,
     })
   }
 
@@ -145,9 +148,9 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    args.x - args.radius - args.strokeWidth,
-    args.x + args.radius + args.strokeWidth,
-    args.y - args.radius - args.strokeWidth,
-    args.y + args.radius + args.strokeWidth,
+    args.x - args.radius,
+    args.x + args.radius,
+    args.y - args.radius,
+    args.y + args.radius,
   ],
 }

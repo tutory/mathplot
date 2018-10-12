@@ -91,7 +91,6 @@ shapes = [
   {
     type: 'polygon',
     args: {
-      id: 123,
       points: [[5, 8], [6, 6], [7, 7], [7, 8]],
       label: 'polygon',
       cloze: true,
@@ -212,7 +211,7 @@ shapes = [
       color: 'blue',
       label: 'α',
       cloze: true,
-      strokeWidth: 1,
+      strokeWidth: 3,
     },
   },
 ]
