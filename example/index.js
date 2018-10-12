@@ -28,8 +28,8 @@ shapes = [
     type: 'function',
     args: Object.assign(
       {
-        fn: x => Math.sin(x),
-        label: 'sin(x)',
+        fn: x => Math.tan(0.1 * x * x),
+        label: 'tan(x*x)',
         color: 'turquoise',
       },
       dimensions

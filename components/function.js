@@ -7,11 +7,14 @@ function groupPoints(points, minY, maxY) {
     .reduce(
       (groups, point) => {
         const y = point[1]
-        const currentGroup = groups[groups.length - 1]
+        const currentGroup = last(groups)
         if (y > minY && y < maxY) {
           currentGroup.push(point)
-        } else if (currentGroup.length !== 0) {
+        } else if (currentGroup.length > 1) {
+          currentGroup.push([point[0], clamp(minY, maxY, y)])
           groups.push([])
+        } else {
+          currentGroup[0] = [point[0], clamp(minY, maxY, y)]
         }
         return groups
       },
