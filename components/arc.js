@@ -19,7 +19,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
   function getLabelPos() {
     if (args.labelX != null && args.labelY != null) {
-      return [args.labelX, args.labelY]
+      return [offScale(args.labelX), offScale(args.labelY)]
     }
     const centerAngle =
       (args.startAngle + args.endAngle) / 2 +
