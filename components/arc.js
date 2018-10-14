@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView, formView, arrowLength } = require('./forms')
+const { clozeView, formView, getArrowAngle } = require('./forms')
 const { clamp, min, max } = require('../utils')
 
 function cos(angle) {
@@ -76,12 +76,22 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     const startAngle =
       args.startForm === 'arrow'
         ? args.startAngle +
-          (arrowLength * (0.5 + args.strokeWidth * 0.5)) / args.radius
+          getArrowAngle(
+            scaleX * args.radius,
+            arcScaleY * args.radius,
+            90 + args.startAngle,
+            args.strokeWidth
+          )
         : args.startAngle
     const endAngle =
       args.endForm === 'arrow'
         ? args.endAngle -
-          (arrowLength * (0.5 + args.strokeWidth * 0.5)) / args.radius
+          getArrowAngle(
+            scaleX * args.radius,
+            arcScaleY * args.radius,
+            -90 - args.endAngle,
+            args.strokeWidth
+          )
         : args.endAngle
     const [startArcX, startArcY] = getPointByAngle(startAngle)
     const [endArcX, endArcY] = getPointByAngle(endAngle)
@@ -126,9 +136,12 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
       angle: -90 - args.endAngle,
-      radius: args.radius,
+      centerX: offScaleX(args.x),
+      centerY: offScaleY(args.y),
+      radiusX: args.radius * scaleX,
+      radiusY: args.radius * arcScaleY,
       scale: args.strokeWidth,
-      end: true,
+      reverse: true,
     })
   }
 
@@ -136,8 +149,11 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.startForm) return
     const [x, y] = getPointByAngle(args.startAngle)
     return formView(args.startForm, x, y, args.color, {
-      angle: 90 - args.startAngle,
-      radius: args.radius,
+      angle: 90 + args.startAngle,
+      centerX: offScaleX(args.x),
+      centerY: offScaleY(args.y),
+      radiusX: args.radius * scaleX,
+      radiusY: args.radius * arcScaleY,
       scale: args.strokeWidth,
     })
   }

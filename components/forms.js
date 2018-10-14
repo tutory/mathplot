@@ -6,11 +6,132 @@ const DEFAULT_CROSS_SIZE = 10
 const DEFAULT_CIRCLE_RADIUS = 5
 const DEFAULT_DOT_RADIUS = 2.5
 
+const DEFAULT_ARROW_ANGLE = 7
+
 const CLOZE_VERTICAL_POSITION_CORRECTION = 2
 
 const px = x => `${x}px`
 
+function cos(angle) {
+  return Math.cos(angle * (Math.PI / 180))
+}
+function sin(angle) {
+  return Math.sin(angle * (Math.PI / 180))
+}
+
+function getPointByAngle(x, y, angle, radiusX, radiusY) {
+  return [x + sin(angle) * radiusX, y + cos(angle) * radiusY]
+}
+
+function getArrowAngle(radiusX, radiusY, angle, scale) {
+  const radiusAtAngle = Math.sqrt(
+    Math.pow(cos(angle) * radiusX, 2) + Math.pow(sin(angle) * radiusY, 2)
+  )
+  return (DEFAULT_ARROW_ANGLE * Math.sqrt(scale) * 130) / radiusAtAngle
+}
+
+function curvedArrowView(x, y, color, options) {
+  const halfArrowWidth = 4 * Math.sqrt(options.scale)
+  const baseAngle = getArrowAngle(
+    options.radiusX,
+    options.radiusY,
+    options.angle,
+    options.scale
+  )
+  const tip = [x, y]
+  let centerTailAngle
+  let outerTailAngle
+  let tipBezierAngle
+  let tailBezierAngle
+
+  if (options.reverse) {
+    centerTailAngle = options.angle - 180 - baseAngle
+    outerTailAngle = centerTailAngle - 2 * Math.sqrt(options.scale)
+    tipBezierAngle = options.angle - 180 - baseAngle / 4
+    tailBezierAngle = options.angle - 180 - (baseAngle * 3) / 4
+  } else {
+    centerTailAngle = options.angle + baseAngle
+    outerTailAngle = centerTailAngle + 2 * Math.sqrt(options.scale)
+    tipBezierAngle = options.angle + baseAngle / 4
+    tailBezierAngle = options.angle + (baseAngle * 3) / 4
+  }
+  const centerTail = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    centerTailAngle,
+    options.radiusX,
+    options.radiusY
+  )
+
+  const innerTipBezierDistance = halfArrowWidth / 7
+  const outerTipBezierDistance = halfArrowWidth / 7
+  const innerTailBezierDistance = halfArrowWidth / 7
+  const outerTailBezierDistance = halfArrowWidth / 7
+
+  const innerTail = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    outerTailAngle,
+    options.radiusX - halfArrowWidth,
+    options.radiusY - halfArrowWidth
+  )
+  const innerTipBezierPoint = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    tipBezierAngle,
+    options.radiusX - innerTipBezierDistance,
+    options.radiusY - innerTipBezierDistance
+  )
+  const innerTailBezierPoint = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    tailBezierAngle,
+    options.radiusX - innerTailBezierDistance,
+    options.radiusY - innerTailBezierDistance
+  )
+  const outerTail = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    outerTailAngle,
+    options.radiusX + halfArrowWidth,
+    options.radiusY + halfArrowWidth
+  )
+  const outerTipBezierPoint = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    tipBezierAngle,
+    options.radiusX + outerTipBezierDistance,
+    options.radiusY + outerTipBezierDistance
+  )
+  const outerTailBezierPoint = getPointByAngle(
+    options.centerX,
+    options.centerY,
+    tailBezierAngle,
+    options.radiusX + outerTailBezierDistance,
+    options.radiusY + outerTailBezierDistance
+  )
+
+  return m('path', {
+    d: `M ${tip[0]} ${tip[1]}
+      C ${innerTipBezierPoint[0]} ${innerTipBezierPoint[1]} ${
+  innerTailBezierPoint[0]
+} ${innerTailBezierPoint[1]} ${innerTail[0]} ${innerTail[1]},
+      L ${centerTail[0]} ${centerTail[1]},
+      L ${outerTail[0]} ${outerTail[1]},
+      C ${outerTailBezierPoint[0]} ${outerTailBezierPoint[1]} ${
+  outerTipBezierPoint[0]
+} ${outerTipBezierPoint[1]} ${tip[0]} ${tip[1]},
+    `,
+    style: {
+      fill: color,
+    },
+  })
+}
+
 function arrowView(x, y, color, options) {
+  if (options.centerX != null) {
+    return curvedArrowView(x, y, color, options)
+  }
   const scale = 0.5 + (options.scale || 1) * 0.5
   const angleCorrection = options.radius ? (12 * scale) / options.radius : 0
   const { angle, l, w } = Object.assign(
@@ -229,6 +350,7 @@ module.exports = {
 
   arrowView,
   arrowLength: DEFAULT_ARROW_LENGTH,
+  getArrowAngle,
 
   circleView,
   circleRadius: DEFAULT_CIRCLE_RADIUS,
