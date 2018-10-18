@@ -156,7 +156,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
       radiusY: args.radius * arcScaleY,
-      scale: args.strokeWidth,
+      strokeWidth: args.strokeWidth,
     })
   }
 
