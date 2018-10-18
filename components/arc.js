@@ -17,6 +17,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   const [startArcX, startArcY] = getPointByAngle(args.startAngle)
   const [endArcX, endArcY] = getPointByAngle(args.endAngle)
   const isLargeArc = mod(args.endAngle - args.startAngle, 360) > 180 ? 1 : 0
+  const strokeWidth = args.strokeWidth || 1
 
   args = Object.assign({}, args)
 
@@ -82,7 +83,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
             scaleX * args.radius,
             arcScaleY * args.radius,
             args.startAngle,
-            args.strokeWidth
+            strokeWidth
           )
         : args.startAngle
     const endAngle =
@@ -92,7 +93,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
             scaleX * args.radius,
             arcScaleY * args.radius,
             args.endAngle,
-            args.strokeWidth
+            strokeWidth
           )
         : args.endAngle
     const [startArcX, startArcY] = getPointByAngle(startAngle)
@@ -114,7 +115,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       `,
       style: {
         stroke: args.color,
-        strokeWidth: args.strokeWidth,
+        strokeWidth,
         strokeDasharray: args.strokeDasharray,
         fill: 'none',
       },
@@ -142,7 +143,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
       radiusY: args.radius * arcScaleY,
-      strokeWidth: args.strokeWidth,
+      strokeWidth,
       reverse: true,
     })
   }
@@ -156,7 +157,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
       radiusY: args.radius * arcScaleY,
-      strokeWidth: args.strokeWidth,
+      strokeWidth,
     })
   }
 
