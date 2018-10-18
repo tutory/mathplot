@@ -128,7 +128,7 @@ function crossView(x, y, color, options = {}) {
   const { strokeWidth, crossSize, angle } = Object.assign(
     {
       angle: 0,
-      strokeWidth: 1,
+      strokeWidth: 2,
       crossSize: (DEFAULT_CROSS_SIZE * (options.strokeWidth || 1)) / 2,
     },
     options
@@ -164,7 +164,7 @@ function barView(x, y, color, options = {}) {
   const { strokeWidth, crossSize, angle } = Object.assign(
     {
       angle: 0,
-      strokeWidth: 1,
+      strokeWidth: 2,
       crossSize: (DEFAULT_CROSS_SIZE * (options.strokeWidth || 1)) / 2,
     },
     options
@@ -191,7 +191,10 @@ function barView(x, y, color, options = {}) {
 
 function circleView(x, y, color, options = {}) {
   const { strokeWidth, radius } = Object.assign(
-    { strokeWidth: 1, radius: DEFAULT_CIRCLE_RADIUS },
+    {
+      strokeWidth: 2,
+      radius: (DEFAULT_CIRCLE_RADIUS * (options.strokeWidth || 1)) / 2,
+    },
     options
   )
 
@@ -208,7 +211,8 @@ function circleView(x, y, color, options = {}) {
 }
 
 function dotView(x, y, color, options = {}) {
-  const radius = options.radius || DEFAULT_DOT_RADIUS
+  const radius =
+    options.radius || (DEFAULT_DOT_RADIUS * (options.strokeWidth || 1)) / 2
 
   return m('circle', {
     cx: x,
@@ -216,6 +220,8 @@ function dotView(x, y, color, options = {}) {
     r: radius,
     style: {
       fill: color,
+      strokeWidth: options.strokeWidth,
+      stroke: color,
     },
   })
 }

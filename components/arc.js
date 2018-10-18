@@ -17,7 +17,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   const [startArcX, startArcY] = getPointByAngle(args.startAngle)
   const [endArcX, endArcY] = getPointByAngle(args.endAngle)
   const isLargeArc = mod(args.endAngle - args.startAngle, 360) > 180 ? 1 : 0
-  const strokeWidth = args.strokeWidth || 1
+  const strokeWidth = args.strokeWidth || 2
 
   args = Object.assign({}, args)
 

@@ -12,12 +12,13 @@ const MARGIN = 5
 function view(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
     {
-      strokeWidth: '1px',
+      strokeWidth: 2,
       color: 'blue',
       form: 'cross',
     },
     args
   )
+  const halfStrokeWidth = args.strokeWidth / 2
 
   function labelView() {
     if (!args.label) return
@@ -26,7 +27,9 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
         dot: dotRadius,
         circle: circleRadius,
         cross: crossSize / 2,
-      }[args.form] + MARGIN
+      }[args.form] *
+        halfStrokeWidth +
+      MARGIN
     const x = offScaleX(args.x) + gapSize
     const y = offScaleY(args.y)
     const labelX = args.labelX == null ? x : offScaleX(args.labelX)
@@ -41,7 +44,9 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
   }
 
   return [
-    formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color),
+    formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color, {
+      strokeWidth: args.strokeWidth,
+    }),
     labelView(),
   ]
 }
