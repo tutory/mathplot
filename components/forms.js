@@ -31,47 +31,37 @@ function getArrowAngle(radiusX, radiusY, angle, scale) {
 }
 
 function curvedArrowView(x, y, color, options) {
-  const halfArrowWidth = 4 * Math.sqrt(options.scale)
+  const strokeWidth = options.strokeWidth || 1
+  const halfArrowWidth = 4 * Math.sqrt(strokeWidth)
+  const halfStrokeWidth = strokeWidth / 2
   const baseAngle = getArrowAngle(
     options.radiusX,
     options.radiusY,
     options.angle,
-    options.scale
+    strokeWidth
   )
   const tip = [x, y]
-  let centerTailAngle
-  let outerTailAngle
-  let tipBezierAngle
-  let tailBezierAngle
-
-  if (options.reverse) {
-    centerTailAngle = options.angle - 180 - baseAngle
-    outerTailAngle = centerTailAngle - 2 * Math.sqrt(options.scale)
-    tipBezierAngle = options.angle - 180 - baseAngle / 4
-    tailBezierAngle = options.angle - 180 - (baseAngle * 3) / 4
-  } else {
-    centerTailAngle = options.angle + baseAngle
-    outerTailAngle = centerTailAngle + 2 * Math.sqrt(options.scale)
-    tipBezierAngle = options.angle + baseAngle / 4
-    tailBezierAngle = options.angle + (baseAngle * 3) / 4
-  }
+  const direction = options.reverse ? -1 : 1
+  const sweepFlag = options.reverse ? 1 : 0
+  const centerTailAngle = 90 + options.angle + direction * baseAngle
+  const tailTipAngle = centerTailAngle + direction * 2 * Math.sqrt(strokeWidth)
+  const tipBezierAngle = 90 + options.angle + direction * (baseAngle / 4)
+  const tailBezierAngle = 90 + options.angle + direction * (baseAngle * (3 / 4))
   const centerTail = getPointByAngle(
     options.centerX,
     options.centerY,
     centerTailAngle,
-    options.radiusX,
-    options.radiusY
+    options.radiusX + halfStrokeWidth,
+    options.radiusY + halfStrokeWidth
   )
 
   const innerTipBezierDistance = halfArrowWidth / 7
-  const outerTipBezierDistance = halfArrowWidth / 7
   const innerTailBezierDistance = halfArrowWidth / 7
-  const outerTailBezierDistance = halfArrowWidth / 7
 
   const innerTail = getPointByAngle(
     options.centerX,
     options.centerY,
-    outerTailAngle,
+    tailTipAngle,
     options.radiusX - halfArrowWidth,
     options.radiusY - halfArrowWidth
   )
@@ -89,38 +79,15 @@ function curvedArrowView(x, y, color, options) {
     options.radiusX - innerTailBezierDistance,
     options.radiusY - innerTailBezierDistance
   )
-  const outerTail = getPointByAngle(
-    options.centerX,
-    options.centerY,
-    outerTailAngle,
-    options.radiusX + halfArrowWidth,
-    options.radiusY + halfArrowWidth
-  )
-  const outerTipBezierPoint = getPointByAngle(
-    options.centerX,
-    options.centerY,
-    tipBezierAngle,
-    options.radiusX + outerTipBezierDistance,
-    options.radiusY + outerTipBezierDistance
-  )
-  const outerTailBezierPoint = getPointByAngle(
-    options.centerX,
-    options.centerY,
-    tailBezierAngle,
-    options.radiusX + outerTailBezierDistance,
-    options.radiusY + outerTailBezierDistance
-  )
 
   return m('path', {
     d: `M ${tip[0]} ${tip[1]}
-      C ${innerTipBezierPoint[0]} ${innerTipBezierPoint[1]} ${
-  innerTailBezierPoint[0]
-} ${innerTailBezierPoint[1]} ${innerTail[0]} ${innerTail[1]},
-      L ${centerTail[0]} ${centerTail[1]},
-      L ${outerTail[0]} ${outerTail[1]},
-      C ${outerTailBezierPoint[0]} ${outerTailBezierPoint[1]} ${
-  outerTipBezierPoint[0]
-} ${outerTipBezierPoint[1]} ${tip[0]} ${tip[1]},
+      A ${options.radiusX + halfStrokeWidth} ${options.radiusY +
+      halfStrokeWidth} 0 0 ${sweepFlag} ${centerTail[0]} ${centerTail[1]}
+      L ${innerTail[0]} ${innerTail[1]},
+      C ${innerTailBezierPoint[0]} ${innerTailBezierPoint[1]} ${
+  innerTipBezierPoint[0]
+} ${innerTipBezierPoint[1]} ${tip[0]} ${tip[1]},
     `,
     style: {
       fill: color,
@@ -132,7 +99,7 @@ function arrowView(x, y, color, options) {
   if (options.centerX != null) {
     return curvedArrowView(x, y, color, options)
   }
-  const scale = 0.5 + (options.scale || 1) * 0.5
+  const scale = 0.5 + (options.strokeWidth || 1) * 0.5
   const angleCorrection = options.radius ? (12 * scale) / options.radius : 0
   const { angle, l, w } = Object.assign(
     { angle: 0, l: DEFAULT_ARROW_LENGTH, w: 10 },
@@ -168,7 +135,7 @@ function crossView(x, y, color, options) {
     stroke: color,
     fill: 'none',
     transformOrigin: `${x}px ${y}px`,
-    transform: `rotate(${angle}deg)`,
+    transform: `rotate(${90 - angle}deg)`,
   }
 
   return [
@@ -200,7 +167,7 @@ function barView(x, y, color, options) {
     stroke: color,
     fill: 'none',
     transformOrigin: `${x}px ${y}px`,
-    transform: `rotate(${angle}deg)`,
+    transform: `rotate(${90 - angle}deg)`,
   }
 
   return [
