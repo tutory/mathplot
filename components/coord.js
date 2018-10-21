@@ -198,7 +198,14 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   ]
 }
 
+const PADDING = 0.2
+
 module.exports = {
   view,
-  getDimensions: ({ args }) => [args.startX, args.endX, args.startY, args.endY],
+  getDimensions: ({ args }) => [
+    args.startX,
+    args.endX + PADDING,
+    args.startY,
+    args.endY + PADDING,
+  ],
 }
