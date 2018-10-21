@@ -7,6 +7,9 @@ function groupPoints(points, minY, maxY) {
     .reduce(
       (groups, point) => {
         const y = point[1]
+        if (typeof y !== 'number') {
+          return groups
+        }
         const currentGroup = last(groups)
         if (y > minY && y < maxY) {
           currentGroup.push(point)
