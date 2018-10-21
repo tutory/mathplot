@@ -40,6 +40,7 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
         args.fn(labelX) / (args.fill ? 2 : 1)
       ),
       color: 'green',
+      strokeWidth: 1,
       strokeDasharray: null,
     },
     args
@@ -59,7 +60,6 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
         points.push([last(points)[0], 0])
       })
     }
-
     return pointGroups.map(points =>
       m('path', {
         d:
@@ -69,7 +69,7 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
             .join(' ') +
           (args.fill ? 'Z' : ''),
         style: {
-          strokeWidth: '2px',
+          strokeWidth: `${args.strokeWidth}px`,
           fill: args.fill || 'none',
           stroke: args.color,
           strokeDasharray: args.strokeDasharray,
