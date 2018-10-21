@@ -2,6 +2,8 @@ const m = global.HYPER_SCRIPT
 const { times, last, clamp, min, max } = require('../utils')
 const { clozeView } = require('./forms')
 
+const PRECISION = 30
+
 function groupPoints(points, minY, maxY) {
   return points
     .reduce(
@@ -44,10 +46,12 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
   )
 
   function graphView() {
-    const points = times((args.endX - args.startX) * scaleX).map(i => [
-      args.startX + i / scaleX,
-      args.fn(args.startX + i / scaleX),
-    ])
+    const points = times((args.endX - args.startX) * PRECISION * scaleX).map(
+      i => [
+        args.startX + i / PRECISION / scaleX,
+        args.fn(args.startX + i / PRECISION / scaleX),
+      ]
+    )
     const pointGroups = groupPoints(points, args.startY, args.endY)
     if (args.fill) {
       pointGroups.map(points => {
