@@ -122,6 +122,30 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
+  function radiiView() {
+    if (!args.drawRadii) return
+    const [startArcX, startArcY] = getPointByAngle(args.startAngle)
+    const [endArcX, endArcY] = getPointByAngle(args.endAngle)
+
+    return m('path', {
+      d: `
+        M
+        ${startArcX}
+        ${startArcY}
+        ${offScaleX(args.x)}
+        ${offScaleY(args.y)}
+        ${endArcX}
+        ${endArcY}
+        `,
+      style: {
+        stroke: args.color,
+        strokeWidth,
+        strokeDasharray: args.strokeDasharray,
+        fill: 'none',
+      },
+    })
+  }
+
   function labelView() {
     if (!args.label) {
       return
@@ -161,7 +185,14 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return [fillView(), strokeView(), startFormView(), endFormView(), labelView()]
+  return [
+    fillView(),
+    strokeView(),
+    radiiView(),
+    startFormView(),
+    endFormView(),
+    labelView(),
+  ]
 }
 
 module.exports = {

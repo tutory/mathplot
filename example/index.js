@@ -190,6 +190,7 @@ shapes = [
       startAngle: 70,
       endAngle: 90,
       keepAspect: true,
+      drawRadii: true,
       startForm: 'arrow',
       endForm: 'bar',
       fill: 'lightblue',
