@@ -1,14 +1,21 @@
 const m = global.HYPER_SCRIPT
-const { clozeView } = require('./forms')
+const { clozeView, formView } = require('./forms')
 const { min, max } = require('../utils')
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
+  let labelOffset = 0
+  if (args.centerForm) {
+    labelOffset += 15
+  }
+  if (args.cloze) {
+    labelOffset += 10
+  }
   args = Object.assign(
     {
       radiusX: args.radius || 1,
       radiusY: args.radius || args.radiusX || 1,
       labelX: args.x,
-      labelY: args.y,
+      labelY: args.y - labelOffset / scaleY,
     },
     args
   )
@@ -40,7 +47,17 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return [ellipseView(), labelView()]
+  function centerFormView() {
+    return formView(
+      args.centerForm,
+      offScaleX(args.x),
+      offScaleY(args.y),
+      args.color,
+      { strokeWidth: args.strokeWidth }
+    )
+  }
+
+  return [ellipseView(), labelView(), centerFormView()]
 }
 
 module.exports = {
