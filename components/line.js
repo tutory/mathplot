@@ -69,7 +69,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       offScaleX(args.endX),
       offScaleY(args.endY),
       args.color,
-      { angle }
+      { angle, strokeWidth: args.strokeWidth }
     )
   }
 
@@ -79,7 +79,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       offScaleX(args.startX),
       offScaleY(args.startY),
       args.color,
-      { angle: 180 + angle }
+      { angle: 180 + angle, strokeWidth: args.strokeWidth }
     )
   }
 
