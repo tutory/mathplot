@@ -8,6 +8,9 @@ const dimensions = {
   endY: 10,
 }
 
+const sf = 'cross'
+const ef = 'bar'
+
 shapes = [
   {
     type: 'coord',
@@ -38,12 +41,12 @@ shapes = [
   {
     type: 'function',
     args: Object.assign({
-      fn: x => Math.sin(x),
+      fn: x => 1 / x,
       label: 'G(x)',
       color: 'turquoise',
       fill: 'paleturquoise',
-      startX: 7,
-      endX: 9,
+      startX: -10,
+      endX: 10,
       startY: -10,
       endY: 10,
     }),
@@ -71,6 +74,7 @@ shapes = [
       fill: 'silver',
       color: 'black',
       label: 'rund',
+      centerForm: 'cross',
       strokeWidth: 1,
       strokeDasharray: '8 4 2 4',
     },
@@ -84,6 +88,7 @@ shapes = [
       radiusY: 0.5,
       label: 'A',
       cloze: true,
+      centerForm: 'bar',
       fill: 'greenyellow',
       color: 'green',
       strokeWidth: 1,
@@ -134,10 +139,39 @@ shapes = [
       startX: 4,
       startY: -1,
       endX: 4,
-      endY: -10,
-      startForm: 'cross',
-      endForm: 'arrow',
+      endY: -4,
+      startForm: sf,
+      endForm: ef,
       color: 'purple',
+      strokeWidth: 2,
+    },
+  },
+  {
+    type: 'line',
+    args: {
+      label: 'U',
+      startX: 5,
+      startY: -1,
+      endX: 5,
+      endY: -4,
+      startForm: sf,
+      endForm: ef,
+      color: 'purple',
+      strokeWidth: 1,
+    },
+  },
+  {
+    type: 'line',
+    args: {
+      label: 'U',
+      startX: 6,
+      startY: -1,
+      endX: 6,
+      endY: -4,
+      startForm: sf,
+      endForm: ef,
+      color: 'purple',
+      strokeWidth: 0.5,
     },
   },
   {
