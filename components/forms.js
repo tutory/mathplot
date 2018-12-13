@@ -175,7 +175,7 @@ function barView(x, y, color, options = {}) {
     stroke: color,
     fill: 'none',
     transformOrigin: `${x}px ${y}px`,
-    transform: `rotate(${90 - angle}deg)`,
+    transform: `rotate(${angle}deg)`,
   }
 
   return [

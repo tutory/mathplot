@@ -162,7 +162,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.endForm) return
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
-      angle: args.endAngle,
+      angle: 90 - args.endAngle,
       centerX: offScaleX(args.x),
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
