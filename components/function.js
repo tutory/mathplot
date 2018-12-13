@@ -54,7 +54,8 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
       ]
     )
     const pointGroups = groupPoints(points, args.startY, args.endY)
-    if (args.fill) {
+    const isFilled = args.fill && args.fill !== 'none'
+    if (isFilled) {
       pointGroups.map(points => {
         points.unshift([points[0][0], 0])
         points.push([last(points)[0], 0])
@@ -67,7 +68,7 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
           points
             .map(point => `${offScaleX(point[0])},${offScaleY(point[1])}`)
             .join(' ') +
-          (args.fill ? 'Z' : ''),
+          (isFilled ? 'Z' : ''),
         style: {
           strokeWidth: `${args.strokeWidth}px`,
           fill: args.fill || 'none',
