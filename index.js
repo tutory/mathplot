@@ -16,16 +16,26 @@ const ONE_CM_PER_UNIT = 37.8
 
 module.exports = function view(
   shapes,
-  { showSolution, scaleX, scaleY },
+  { showSolution, scaleX, scaleY, clipRect },
   attrs = {}
 ) {
   scaleX = scaleX || ONE_CM_PER_UNIT
   scaleY = scaleY || ONE_CM_PER_UNIT
-  const dimensions = shapes.map(shape => types[shape.type].getDimensions(shape))
-  const minX = Math.min(...dimensions.map(d => d[0]))
-  const maxX = Math.max(...dimensions.map(d => d[1]))
-  const minY = Math.min(...dimensions.map(d => d[2]))
-  const maxY = Math.max(...dimensions.map(d => d[3]))
+  let minX, maxX, minY, maxY
+  if (clipRect) {
+    minX = clipRect.startX
+    maxX = clipRect.endX
+    minY = clipRect.startY
+    maxY = clipRect.endY
+  } else {
+    const dimensions = shapes.map(shape =>
+      types[shape.type].getDimensions(shape)
+    )
+    minX = Math.min(...dimensions.map(d => d[0]))
+    maxX = Math.max(...dimensions.map(d => d[1]))
+    minY = Math.min(...dimensions.map(d => d[2]))
+    maxY = Math.max(...dimensions.map(d => d[3]))
+  }
   const offsetX = -minX
   const offsetY = maxY
   const renderedShapes = shapes.map(shape =>
