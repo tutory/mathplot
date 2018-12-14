@@ -20,7 +20,7 @@ function sin(angle) {
 }
 
 function getPointByAngle(x, y, angle, radiusX, radiusY) {
-  return [x + sin(angle) * radiusX, y + cos(angle) * radiusY]
+  return [x + cos(angle) * radiusX, y + sin(angle) * radiusY]
 }
 
 function getArrowAngle(radiusX, radiusY, angle, scale) {
@@ -41,7 +41,7 @@ function curvedArrowView(x, y, color, options) {
     strokeWidth
   )
   const tip = [x, y]
-  const direction = options.reverse ? -1 : 1
+  const direction = options.reverse ? 1 : -1
   const sweepFlag = options.reverse ? 1 : 0
   const centerTailAngle = 90 + options.angle + direction * baseAngle
   const tailTipAngle = centerTailAngle + direction * 2 * Math.sqrt(strokeWidth)

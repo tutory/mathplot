@@ -99,6 +99,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     const [startArcX, startArcY] = getPointByAngle(startAngle)
     const [endArcX, endArcY] = getPointByAngle(endAngle)
 
+    const isStrokeLargeArc = mod(endAngle - startAngle, 360) > 180 ? 1 : 0
     return m('path', {
       d: `
         M
@@ -108,7 +109,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
         ${scaleX * args.radius}
         ${arcScaleY * args.radius}
         0
-        ${isLargeArc}
+        ${isStrokeLargeArc}
         0
         ${endArcX}
         ${endArcY}
@@ -162,7 +163,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.endForm) return
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
-      angle: 90 - args.endAngle,
+      angle: - offsetAngle - args.endAngle,
       centerX: offScaleX(args.x),
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
@@ -176,7 +177,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.startForm) return
     const [x, y] = getPointByAngle(args.startAngle)
     return formView(args.startForm, x, y, args.color, {
-      angle: args.startAngle,
+      angle: - offsetAngle - args.startAngle,
       centerX: offScaleX(args.x),
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
