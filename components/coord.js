@@ -28,18 +28,22 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
       stepLabelsY: args.stepGridY || 1,
       labelXView: x => round(x),
       labelYView: x => round(x),
+      gridColor: 'lightblue',
+      gridStrokeWidth: 1,
+      axisColor: 'black',
     },
     args
   )
 
   const axisStyle = {
     strokeWidth: '1px',
-    stroke: 'black',
+    stroke: args.axisColor,
   }
 
   const gridStyle = {
-    strokeWidth: '1px',
-    stroke: 'lightblue',
+    strokeWidth: `${args.gridStrokeWidth}px`,
+    stroke: args.gridColor,
+    strokeDasharray: args.gridStrokeDasharray,
   }
 
   function xLabelsView() {
@@ -152,7 +156,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         endX: args.endX,
         endY: 0,
         endForm: 'arrow',
-        color: 'black',
+        color: args.axisColor,
         strokeWidth: 1,
       },
       { offScaleX, offScaleY, scaleX, scaleY }
@@ -167,7 +171,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         endX: 0,
         endY: args.endY,
         endForm: 'arrow',
-        color: 'black',
+        color: args.axisColor,
         strokeWidth: 1,
       },
       { offScaleX, offScaleY, scaleX, scaleY }

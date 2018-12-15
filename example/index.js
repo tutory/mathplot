@@ -23,6 +23,7 @@ shapes = [
         labelY: 'f(x)',
         labelX: 'x',
         unitX: 'm',
+        gridStrokeDasharray: '2 2',
       },
       dimensions
     ),
