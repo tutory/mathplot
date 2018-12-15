@@ -252,6 +252,20 @@ shapes = [
       strokeWidth: 3,
     },
   },
+  {
+    type: 'rect',
+    args: {
+      x: -12,
+      y: -6,
+      width: 10,
+      height: 3,
+      fill: 'lightblue',
+      color: 'blue',
+      label: 'rect',
+      cloze: false,
+      strokeWidth: 1,
+    },
+  },
 ]
 
 m.mount(document.body, {

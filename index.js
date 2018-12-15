@@ -9,6 +9,7 @@ const types = {
   line: require('./components/line'),
   point: require('./components/point'),
   arc: require('./components/arc'),
+  rect: require('./components/rect'),
   label: require('./components/label'),
 }
 
