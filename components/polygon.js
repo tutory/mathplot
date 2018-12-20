@@ -3,6 +3,9 @@ const { clozeView } = require('./forms')
 const pointView = require('./point').view
 const { min, max } = require('../utils')
 
+const LABEL_DISTANCE = 0.2
+const CLOZE_LABEL_DISTANCE = 0.4
+
 function coalesce(...args) {
   for (let arg of args) {
     if (arg != null) return arg
@@ -54,17 +57,17 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
   }
 
   function pointsView() {
-    const distance = 0.2
-
     return args.points.map(p => {
+      const cloze = coalesce(p.cloze, args.cloze)
+      const labelDistance = cloze ? CLOZE_LABEL_DISTANCE : LABEL_DISTANCE
       const a = (p.y - centerY) / (p.x - centerX)
-      const labelX2 = distance / (1 + a * a)
+      const labelX2 = labelDistance / (1 + a * a)
       const dirX = p.x < centerX ? -1 : 1
       const dirY = p.y < centerY ? -1 : 1
       const labelX = coalesce(p.labelX, p.x + Math.sqrt(labelX2) * dirX)
       const labelY = coalesce(
         p.labelY,
-        p.y + Math.sqrt(distance - labelX2) * dirY
+        p.y + Math.sqrt(labelDistance - labelX2) * dirY
       )
       return pointView(
         {
@@ -76,7 +79,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
           labelX,
           labelY,
           labelHorizontalAlign: 'center',
-          cloze: coalesce(p.cloze, args.cloze),
+          cloze,
         },
         { offScaleX, offScaleY, showSolution }
       )
