@@ -5,7 +5,6 @@ const { min, max } = require('../utils')
 
 function coalesce(...args) {
   for (let arg of args) {
-    console.log(arg)
     if (arg != null) return arg
   }
 }
