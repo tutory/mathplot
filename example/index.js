@@ -98,9 +98,14 @@ shapes = [
   {
     type: 'polygon',
     args: {
-      points: [[5, 8], [6, 6], [7, 7], [7, 8]],
-      label: 'polygon',
-      cloze: true,
+      points: [
+        { x: 5, y: 8, label: 'A' },
+        { x: 6, y: 6, label: 'B' },
+        { x: 7, y: 7, label: 'C', form: 'cross' },
+        { x: 7, y: 8, label: 'D', cloze: true },
+      ],
+      // label: 'polygon',
+      cloze: false,
       labelY: 8.5,
       fill: 'coral',
       color: 'crimson',

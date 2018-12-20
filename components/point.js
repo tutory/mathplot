@@ -23,11 +23,11 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
   function labelView() {
     if (!args.label) return
     const gapSize =
-      {
+      ({
         dot: dotRadius,
         circle: circleRadius,
         cross: crossSize / 2,
-      }[args.form] *
+      }[args.form] || 0) *
         halfStrokeWidth +
       MARGIN
     const x = offScaleX(args.x) + gapSize
@@ -37,7 +37,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 
     return clozeView(labelX, labelY, args.label, {
       color: args.color,
-      horizontal: 'left',
+      horizontal: args.labelHorizontalAlign || 'left',
       cloze: args.cloze,
       showSolution,
     })

@@ -12,6 +12,8 @@ const CLOZE_VERTICAL_POSITION_CORRECTION = 2
 
 const px = x => `${x}px`
 
+function noop() {}
+
 function cos(angle) {
   return Math.cos(angle * (Math.PI / 180))
 }
@@ -240,10 +242,11 @@ const typeViewMap = {
   circle: circleView,
   dot: dotView,
   bar: barView,
+  none: noop,
 }
 
 function formView(type, x, y, color, options) {
-  const view = typeViewMap[type]
+  const view = typeViewMap[type] || noop
   if (view) {
     return view(x, y, color, options)
   }

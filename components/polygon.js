@@ -1,12 +1,22 @@
 const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
+const pointView = require('./point').view
 const { min, max } = require('../utils')
+
+function coalesce(...args) {
+  for (let arg of args) {
+    console.log(arg)
+    if (arg != null) return arg
+  }
+}
 
 function sum(arr) {
   return arr.reduce((sum, v) => sum + v, 0)
 }
 
 function view(args, { offScaleX, offScaleY, showSolution }) {
+  const centerX = sum(args.points.map(p => p.x)) / args.points.length
+  const centerY = sum(args.points.map(p => p.y)) / args.points.length
   args = Object.assign(
     {
       strokeWidth: '2px',
@@ -19,7 +29,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
   function pathView() {
     return m('path', {
       d: `M ${args.points
-        .map(p => [offScaleX(p[0]), offScaleY(p[1])].join())
+        .map(p => [offScaleX(p.x), offScaleY(p.y)].join())
         .join(' ')} Z`,
       style: {
         strokeWidth: args.strokeWidth,
@@ -31,11 +41,9 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
 
   function labelView() {
     if (!args.label) return
-    const labelX =
-      args.labelX || sum(args.points.map(p => p[0])) / args.points.length
+    const labelX = args.labelX || centerX
     const x = offScaleX(labelX)
-    const labelY =
-      args.labelY || sum(args.points.map(p => p[1])) / args.points.length
+    const labelY = args.labelY || centerY
     const y = offScaleY(labelY)
 
     return clozeView(x, y, args.label, {
@@ -46,15 +54,45 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return [pathView(), labelView()]
+  function pointsView() {
+    const distance = 0.2
+
+    return args.points.map(p => {
+      const a = (p.y - centerY) / (p.x - centerX)
+      const labelX2 = distance / (1 + a * a)
+      const dirX = p.x < centerX ? -1 : 1
+      const dirY = p.y < centerY ? -1 : 1
+      const labelX = coalesce(p.labelX, p.x + Math.sqrt(labelX2) * dirX)
+      const labelY = coalesce(
+        p.labelY,
+        p.y + Math.sqrt(distance - labelX2) * dirY
+      )
+      return pointView(
+        {
+          x: p.x,
+          y: p.y,
+          label: p.label,
+          color: coalesce(p.color, args.color),
+          form: p.form,
+          labelX,
+          labelY,
+          labelHorizontalAlign: 'center',
+          cloze: coalesce(p.cloze, args.cloze),
+        },
+        { offScaleX, offScaleY, showSolution }
+      )
+    })
+  }
+
+  return [pathView(), pointsView(), labelView()]
 }
 
 module.exports = {
   view,
   getDimensions: ({ args }) => [
-    min(args.labelX, ...args.points.map(p => p[0])),
-    max(args.labelX, ...args.points.map(p => p[0])),
-    min(args.labelY, ...args.points.map(p => p[1])),
-    max(args.labelY, ...args.points.map(p => p[1])),
+    min(args.labelX, ...args.points.map(p => p.x)),
+    max(args.labelX, ...args.points.map(p => p.x)),
+    min(args.labelY, ...args.points.map(p => p.y)),
+    max(args.labelY, ...args.points.map(p => p.y)),
   ],
 }
