@@ -336,6 +336,10 @@ function textView(x, y, label, options) {
   )
 }
 
+function group(key, els) {
+  return m('g', { key }, els)
+}
+
 module.exports = {
   formView,
   clozeView,
@@ -352,4 +356,6 @@ module.exports = {
 
   crossView,
   crossSize: DEFAULT_CROSS_SIZE,
+
+  group,
 }

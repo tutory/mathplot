@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView } = require('./forms')
+const { clozeView, group } = require('./forms')
 const { min, max } = require('../utils')
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
@@ -38,13 +38,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return m(
-    'g',
-    {
-      key: args.id,
-    },
-    [rectView(), labelView()]
-  )
+  return group(args.id, [rectView(), labelView()])
 }
 
 module.exports = {

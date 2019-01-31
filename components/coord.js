@@ -1,6 +1,7 @@
 const m = global.HYPER_SCRIPT
 const { penultimate } = require('../utils')
 const lineView = require('./line').view
+const { group } = require('./forms')
 
 const MARGIN = 5
 
@@ -189,23 +190,17 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     )
   }
 
-  return m(
-    'g',
-    {
-      key: args.id,
-    },
-    [
-      xGridLinesView(),
-      xLabelsView(),
-      yGridLinesView(),
-      yLabelsView(),
-      xAxisView(),
-      yAxisView(),
-      xAxisLabelView(),
-      yAxisLabelView(),
-      originView(),
-    ]
-  )
+  return group(args.id, [
+    group('xGridLines', xGridLinesView()),
+    group('xLabels', xLabelsView()),
+    group('yGridLines', yGridLinesView()),
+    group('yLabels', yLabelsView()),
+    group('xAxis', xAxisView()),
+    group('yAxis', yAxisView()),
+    group('xAxisLabel', xAxisLabelView()),
+    group('yAxisLabel', yAxisLabelView()),
+    group('origin', originView()),
+  ])
 }
 
 const PADDING = 0.2

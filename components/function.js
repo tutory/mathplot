@@ -1,6 +1,6 @@
 const m = global.HYPER_SCRIPT
 const { times, last, clamp, min, max } = require('../utils')
-const { clozeView } = require('./forms')
+const { clozeView, group } = require('./forms')
 
 const PRECISION = 30
 
@@ -97,13 +97,7 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
       }
     )
   }
-  return m(
-    'g',
-    {
-      key: args.id,
-    },
-    [graphView(), labelView()]
-  )
+  return group(args.id, [graphView(), labelView()])
 }
 
 module.exports = {

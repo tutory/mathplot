@@ -4,6 +4,7 @@ const {
   crossSize,
   circleRadius,
   dotRadius,
+  group,
 } = require('./forms')
 const { min, max } = require('../utils')
 
@@ -43,18 +44,12 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return m(
-    'g',
-    {
-      key: args.id,
-    },
-    [
-      formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color, {
-        strokeWidth: args.strokeWidth,
-      }),
-      labelView(),
-    ]
-  )
+  return group(args.id, [
+    formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color, {
+      strokeWidth: args.strokeWidth,
+    }),
+    labelView(),
+  ])
 }
 
 module.exports = {
