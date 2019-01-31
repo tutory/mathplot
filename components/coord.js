@@ -48,7 +48,11 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function xLabelsView() {
-    const steps = range0(args.startX, args.endX, args.stepLabelsX)
+    const steps = range0(
+      args.startX,
+      args.endX - 1 * args.stepLabelsX,
+      args.stepLabelsX
+    )
     return steps.map(x => {
       const isAxisUnit = args.unitX && x === penultimate(steps)
       return [
@@ -87,7 +91,11 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function yLabelsView() {
-    const steps = range0(args.startY, args.endY, args.stepLabelsY)
+    const steps = range0(
+      args.startY,
+      args.endY - 1 * args.stepLabelsY,
+      args.stepLabelsY
+    )
     return steps.map(y => {
       const isAxisUnit = args.unitY && y === penultimate(steps)
       return [
