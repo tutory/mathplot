@@ -50,7 +50,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   function xLabelsView() {
     const steps = range0(
       args.startX,
-      args.endX - 1 * args.stepLabelsX,
+      args.endX - 0.5 * args.stepLabelsX,
       args.stepLabelsX
     )
     return steps.map(x => {
@@ -93,7 +93,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   function yLabelsView() {
     const steps = range0(
       args.startY,
-      args.endY - 1 * args.stepLabelsY,
+      args.endY - 0.5 * args.stepLabelsY,
       args.stepLabelsY
     )
     return steps.map(y => {
