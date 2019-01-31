@@ -117,7 +117,13 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       },
     })
   }
-  return [lineView(), startFormView(), endFormView(), labelView()]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [lineView(), startFormView(), endFormView(), labelView()]
+  )
 }
 
 module.exports = {

@@ -86,7 +86,13 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return [pathView(), pointsView(), labelView()]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [pathView(), pointsView(), labelView()]
+  )
 }
 
 module.exports = {

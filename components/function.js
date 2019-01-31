@@ -97,8 +97,13 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
       }
     )
   }
-
-  return [graphView(), labelView()]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [graphView(), labelView()]
+  )
 }
 
 module.exports = {

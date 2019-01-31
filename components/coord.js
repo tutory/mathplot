@@ -189,17 +189,23 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     )
   }
 
-  return [
-    xGridLinesView(),
-    xLabelsView(),
-    yGridLinesView(),
-    yLabelsView(),
-    xAxisView(),
-    yAxisView(),
-    xAxisLabelView(),
-    yAxisLabelView(),
-    originView(),
-  ]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [
+      xGridLinesView(),
+      xLabelsView(),
+      yGridLinesView(),
+      yLabelsView(),
+      xAxisView(),
+      yAxisView(),
+      xAxisLabelView(),
+      yAxisLabelView(),
+      originView(),
+    ]
+  )
 }
 
 const PADDING = 0.2

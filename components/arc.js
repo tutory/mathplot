@@ -163,7 +163,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.endForm) return
     const [x, y] = getPointByAngle(args.endAngle)
     return formView(args.endForm, x, y, args.color, {
-      angle: - offsetAngle - args.endAngle,
+      angle: -offsetAngle - args.endAngle,
       centerX: offScaleX(args.x),
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
@@ -177,7 +177,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.startForm) return
     const [x, y] = getPointByAngle(args.startAngle)
     return formView(args.startForm, x, y, args.color, {
-      angle: - offsetAngle - args.startAngle,
+      angle: -offsetAngle - args.startAngle,
       centerX: offScaleX(args.x),
       centerY: offScaleY(args.y),
       radiusX: args.radius * scaleX,
@@ -186,14 +186,20 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return [
-    fillView(),
-    strokeView(),
-    radiiView(),
-    startFormView(),
-    endFormView(),
-    labelView(),
-  ]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [
+      fillView(),
+      strokeView(),
+      radiiView(),
+      startFormView(),
+      endFormView(),
+      labelView(),
+    ]
+  )
 }
 
 module.exports = {

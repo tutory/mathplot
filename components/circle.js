@@ -57,7 +57,13 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     )
   }
 
-  return [ellipseView(), labelView(), centerFormView()]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [ellipseView(), labelView(), centerFormView()]
+  )
 }
 
 module.exports = {

@@ -38,7 +38,13 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return [rectView(), labelView()]
+  return m(
+    'g',
+    {
+      key: args.id,
+    },
+    [rectView(), labelView()]
+  )
 }
 
 module.exports = {
