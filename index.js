@@ -75,13 +75,13 @@ module.exports = function view(
           text-anchor: end;
         }
         svg.mathplot text.verticalTop {
-          alignment-baseline: hanging;
+          dominant-baseline: hanging;
         }
         svg.mathplot text.verticalCenter {
-          alignment-baseline: middle;
+          dominant-baseline: middle;
         }
         svg.mathplot text.verticalBottom {
-          alignment-baseline: baseline;
+          dominant-baseline: baseline;
         }
         svg.mathplot .cloze {
           fill: white;
