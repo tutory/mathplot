@@ -30,7 +30,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return group(args.id, labelView())
+  return labelView()
 }
 
 module.exports = {

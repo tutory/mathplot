@@ -117,12 +117,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
       },
     })
   }
-  return group(args.id, [
-    lineView(),
-    startFormView(),
-    endFormView(),
-    labelView(),
-  ])
+  return [lineView(), startFormView(), endFormView(), labelView()]
 }
 
 module.exports = {

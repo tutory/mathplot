@@ -44,12 +44,12 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return group(args.id, [
+  return [
     formView(args.form, offScaleX(args.x), offScaleY(args.y), args.color, {
       strokeWidth: args.strokeWidth,
     }),
     labelView(),
-  ])
+  ]
 }
 
 module.exports = {

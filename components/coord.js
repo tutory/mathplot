@@ -198,7 +198,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     )
   }
 
-  return group(args.id, [
+  return [
     group('xGridLines', xGridLinesView()),
     group('xLabels', xLabelsView()),
     group('yGridLines', yGridLinesView()),
@@ -208,7 +208,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     group('xAxisLabel', xAxisLabelView()),
     group('yAxisLabel', yAxisLabelView()),
     group('origin', originView()),
-  ])
+  ]
 }
 
 const PADDING = 0.2

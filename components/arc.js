@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView, formView, getArrowAngle, group } = require('./forms')
+const { clozeView, formView, getArrowAngle } = require('./forms')
 const { clamp, min, max } = require('../utils')
 
 function cos(angle) {
@@ -186,14 +186,14 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     })
   }
 
-  return group(args.id, [
+  return [
     fillView(),
     strokeView(),
     radiiView(),
     startFormView(),
     endFormView(),
     labelView(),
-  ])
+  ]
 }
 
 module.exports = {

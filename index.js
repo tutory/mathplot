@@ -12,6 +12,7 @@ const types = {
   rect: require('./components/rect'),
   label: require('./components/label'),
 }
+const { group } = require('./components/forms')
 
 const ONE_CM_PER_UNIT = 37.8
 
@@ -40,15 +41,18 @@ module.exports = function view(
   const offsetX = -minX
   const offsetY = maxY
   const renderedShapes = shapes.map(shape =>
-    types[shape.type].view(shape.args, {
-      offsetX,
-      offsetY,
-      scaleX,
-      scaleY,
-      offScaleX: x => scaleX * (offsetX + x),
-      offScaleY: y => scaleY * (offsetY - y),
-      showSolution: showSolution !== false ? true : false,
-    })
+    group(
+      shape.attrs,
+      types[shape.type].view(shape.args, {
+        offsetX,
+        offsetY,
+        scaleX,
+        scaleY,
+        offScaleX: x => scaleX * (offsetX + x),
+        offScaleY: y => scaleY * (offsetY - y),
+        showSolution: showSolution !== false ? true : false,
+      })
+    )
   )
 
   return [

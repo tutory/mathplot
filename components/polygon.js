@@ -86,7 +86,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
     })
   }
 
-  return group(args.id, [pathView(), pointsView(), labelView()])
+  return [pathView(), pointsView(), labelView()]
 }
 
 module.exports = {

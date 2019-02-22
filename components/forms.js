@@ -88,8 +88,8 @@ function curvedArrowView(x, y, color, options) {
       halfStrokeWidth} 0 0 ${sweepFlag} ${centerTail[0]} ${centerTail[1]}
       L ${innerTail[0]} ${innerTail[1]},
       C ${innerTailBezierPoint[0]} ${innerTailBezierPoint[1]} ${
-  innerTipBezierPoint[0]
-} ${innerTipBezierPoint[1]} ${tip[0]} ${tip[1]},
+      innerTipBezierPoint[0]
+    } ${innerTipBezierPoint[1]} ${tip[0]} ${tip[1]},
     `,
     style: {
       fill: color,
@@ -336,8 +336,8 @@ function textView(x, y, label, options) {
   )
 }
 
-function group(key, els) {
-  return m('g', { key }, els)
+function group(attrs, els) {
+  return m('g', attrs, els)
 }
 
 module.exports = {
