@@ -9,8 +9,8 @@ function round(value) {
   return Math.round(value * 1000) / 1000
 }
 
-function range0(from, to, step = 1) {
-  const arr = []
+function range0(from, to, step = 1, include0 = false) {
+  const arr = include0 ? [0] : []
   for (let i = -step; i > from; i -= step) {
     arr.unshift(i)
   }
@@ -32,6 +32,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
       gridColor: 'lightblue',
       gridStrokeWidth: 1,
       axisColor: 'black',
+      isXAxisVisible: true,
+      isYAxisVisible: true,
+      isGridXVisible: true,
+      isGridYVisible: true,
     },
     args
   )
@@ -48,10 +52,12 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function xLabelsView() {
+    const include0 = !args.isYAxisVisible
     const steps = range0(
       args.startX,
       args.endX - 0.5 * args.stepLabelsX,
-      args.stepLabelsX
+      args.stepLabelsX,
+      include0
     )
     return steps.map(x => {
       const isAxisUnit = args.unitX && x === penultimate(steps)
@@ -77,7 +83,8 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function xGridLinesView() {
-    return range0(args.startX, args.endX, args.stepGridX).map(x => {
+    const include0 = !args.isYAxisVisible
+    return range0(args.startX, args.endX, args.stepGridX, include0).map(x => {
       return [
         m('line', {
           x1: offScaleX(x),
@@ -91,10 +98,12 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function yLabelsView() {
+    const include0 = !args.isXAxisVisible
     const steps = range0(
       args.startY,
       args.endY - 0.5 * args.stepLabelsY,
-      args.stepLabelsY
+      args.stepLabelsY,
+      include0
     )
     return steps.map(y => {
       const isAxisUnit = args.unitY && y === penultimate(steps)
@@ -144,7 +153,8 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function yGridLinesView() {
-    return range0(args.startY, args.endY, args.stepGridY).map(y => {
+    const include0 = !args.isXAxisVisible
+    return range0(args.startY, args.endY, args.stepGridY, include0).map(y => {
       return [
         m('line', {
           y1: offScaleY(y),
@@ -199,15 +209,18 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   return [
-    group('xGridLines', xGridLinesView()),
-    group('xLabels', xLabelsView()),
-    group('yGridLines', yGridLinesView()),
-    group('yLabels', yLabelsView()),
-    group('xAxis', xAxisView()),
-    group('yAxis', yAxisView()),
-    group('xAxisLabel', xAxisLabelView()),
-    group('yAxisLabel', yAxisLabelView()),
-    group('origin', originView()),
+    args.isGridXVisible && group('xGridLines', xGridLinesView()),
+    args.isGridYVisible && group('yGridLines', yGridLinesView()),
+
+    args.isXAxisVisible && group('xLabels', xLabelsView()),
+    args.isXAxisVisible && group('xAxis', xAxisView()),
+    args.isXAxisVisible && group('xAxisLabel', xAxisLabelView()),
+
+    args.isYAxisVisible && group('yLabels', yLabelsView()),
+    args.isYAxisVisible && group('yAxis', yAxisView()),
+    args.isYAxisVisible && group('yAxisLabel', yAxisLabelView()),
+
+    args.isXAxisVisible && args.isYAxisVisible && group('origin', originView()),
   ]
 }
 
