@@ -15,12 +15,24 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     if (!args.label) return
     const x = offScaleX(args.labelX)
     const y = offScaleY(args.labelY)
-    return clozeView(x, y, args.label, {
-      color: args.color,
-      autoBackground: !args.fill,
-      cloze: args.cloze,
-      showSolution,
-    })
+    return group(
+      {
+        style: {
+          transform: `rotate(${args.rotate}deg)`,
+          transformOrigin: `${offScaleX(args.x)}px ${offScaleY(args.y)}px`,
+        },
+      },
+      clozeView(x, y, args.label, {
+        color: args.color,
+        autoBackground: !args.fill,
+        cloze: args.cloze,
+        showSolution,
+        style: {
+          transform: `rotate(${-args.rotate}deg)`,
+          transformOrigin: `${x}px ${y}px`,
+        },
+      })
+    )
   }
 
   function rectView() {
@@ -34,6 +46,8 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
         strokeWidth: args.strokeWidth,
         strokeDasharray: args.strokeDasharray,
         fill: args.fill,
+        transform: `rotate(${args.rotate}deg)`,
+        transformOrigin: `${offScaleX(args.x)}px ${offScaleY(args.y)}px`,
       },
     })
   }

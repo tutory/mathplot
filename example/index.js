@@ -264,6 +264,7 @@ shapes = [
       y: -6,
       width: 10,
       height: 3,
+      rotate: 175,
       fill: 'lightblue',
       color: 'blue',
       label: 'rect',
