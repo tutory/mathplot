@@ -1,6 +1,6 @@
 {
   "name": "mathplot",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "hyper script based math plotter",
   "main": "index.js",
   "scripts": {
