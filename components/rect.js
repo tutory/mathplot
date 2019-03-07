@@ -18,7 +18,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
     return group(
       {
         style: {
-          transform: `rotate(${args.rotate}deg)`,
+          transform: `rotate(${args.rotation}deg)`,
           transformOrigin: `${offScaleX(args.x)}px ${offScaleY(args.y)}px`,
         },
       },
@@ -28,7 +28,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
         cloze: args.cloze,
         showSolution,
         style: {
-          transform: `rotate(${-args.rotate}deg)`,
+          transform: `rotate(${-args.rotation}deg)`,
           transformOrigin: `${x}px ${y}px`,
         },
       })
@@ -46,7 +46,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
         strokeWidth: args.strokeWidth,
         strokeDasharray: args.strokeDasharray,
         fill: args.fill,
-        transform: `rotate(${args.rotate}deg)`,
+        transform: `rotate(${args.rotation}deg)`,
         transformOrigin: `${offScaleX(args.x)}px ${offScaleY(args.y)}px`,
       },
     })

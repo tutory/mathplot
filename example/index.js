@@ -214,7 +214,7 @@ shapes = [
     args: {
       x: 4,
       y: 2,
-      rotate: 20,
+      rotation: 20,
       label: 'Huhu',
       cloze: true,
       horizontalAnchor: 'center',
@@ -264,7 +264,7 @@ shapes = [
       y: -6,
       width: 10,
       height: 3,
-      rotate: 175,
+      rotation: 175,
       fill: 'lightblue',
       color: 'blue',
       label: 'rect',

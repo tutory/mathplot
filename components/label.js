@@ -25,7 +25,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
       horizontal: args.horizontalAnchor,
       style: {
         transformOrigin: `${x}px ${y}px`,
-        transform: `rotate(${args.rotate}deg)`,
+        transform: `rotate(${args.rotation}deg)`,
       },
     })
   }
