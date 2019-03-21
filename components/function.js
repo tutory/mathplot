@@ -2,24 +2,28 @@ const m = global.HYPER_SCRIPT
 const { times, last, clamp, min, max } = require('../utils')
 const { clozeView } = require('./forms')
 
-const PRECISION = 30
+const PRECISION = 10
+const NO_FILL = 'none'
 
-function groupPoints(points, minY, maxY) {
+function groupPoints(points, minY, maxY, fill) {
   return points
     .reduce(
       (groups, point) => {
-        const y = point[1]
+        let [x, y] = point
         if (typeof y !== 'number') {
           return groups
         }
+        if (fill !== NO_FILL) {
+          y = clamp(minY, maxY, y)
+        }
         const currentGroup = last(groups)
-        if (y > minY && y < maxY) {
-          currentGroup.push(point)
+        if (y >= minY && y <= maxY) {
+          currentGroup.push([x, y])
         } else if (currentGroup.length > 1) {
-          currentGroup.push([point[0], clamp(minY, maxY, y)])
+          currentGroup.push([x, clamp(minY, maxY, y)])
           groups.push([])
         } else {
-          currentGroup[0] = [point[0], clamp(minY, maxY, y)]
+          currentGroup[0] = [x, clamp(minY, maxY, y)]
         }
         return groups
       },
@@ -53,8 +57,8 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
         args.fn(args.startX + i / PRECISION / scaleX),
       ]
     )
-    const pointGroups = groupPoints(points, args.startY, args.endY)
-    const isFilled = args.fill && args.fill !== 'none'
+    const pointGroups = groupPoints(points, args.startY, args.endY, args.fill)
+    const isFilled = args.fill && args.fill !== NO_FILL
     if (isFilled) {
       pointGroups.map(points => {
         points.unshift([points[0][0], 0])
@@ -71,7 +75,7 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
           (isFilled ? 'Z' : ''),
         style: {
           strokeWidth: `${args.strokeWidth}px`,
-          fill: args.fill || 'none',
+          fill: args.fill || NO_FILL,
           stroke: args.color,
           strokeDasharray: args.strokeDasharray,
         },
