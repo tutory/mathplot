@@ -209,16 +209,16 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   return [
-    args.isGridXVisible && group('xGridLines', xGridLinesView()),
-    args.isGridYVisible && group('yGridLines', yGridLinesView()),
+    args.isGridXVisible && group(xGridLinesView()),
+    args.isGridYVisible && group(yGridLinesView()),
 
-    args.isXAxisVisible && group('xLabels', xLabelsView()),
-    args.isXAxisVisible && group('xAxis', xAxisView()),
-    args.isXAxisVisible && group('xAxisLabel', xAxisLabelView()),
+    args.isXAxisVisible && group(xLabelsView()),
+    args.isXAxisVisible && group(xAxisView()),
+    args.isXAxisVisible && group(xAxisLabelView()),
 
-    args.isYAxisVisible && group('yLabels', yLabelsView()),
-    args.isYAxisVisible && group('yAxis', yAxisView()),
-    args.isYAxisVisible && group('yAxisLabel', yAxisLabelView()),
+    args.isYAxisVisible && group(yLabelsView()),
+    args.isYAxisVisible && group(yAxisView()),
+    args.isYAxisVisible && group(yAxisLabelView()),
 
     args.isXAxisVisible && args.isYAxisVisible && group('origin', originView()),
   ]
