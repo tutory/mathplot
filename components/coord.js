@@ -111,7 +111,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         m(
           'text.verticalCenter.horizontalRight',
           {
-            x: offScaleX(0) - 2 * MARGIN,
+            x: offScaleX(0) - MARGIN,
             y: offScaleY(y),
             className: isAxisUnit ? 'axisUnit' : '',
           },
