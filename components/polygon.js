@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView, group } = require('./forms')
+const { clozeView } = require('./forms')
 const pointView = require('./point').view
 const { min, max } = require('../utils')
 

@@ -84,8 +84,9 @@ function curvedArrowView(x, y, color, options) {
 
   return m('path', {
     d: `M ${tip[0]} ${tip[1]}
-      A ${options.radiusX + halfStrokeWidth} ${options.radiusY +
-      halfStrokeWidth} 0 0 ${sweepFlag} ${centerTail[0]} ${centerTail[1]}
+      A ${options.radiusX + halfStrokeWidth} ${
+      options.radiusY + halfStrokeWidth
+    } 0 0 ${sweepFlag} ${centerTail[0]} ${centerTail[1]}
       L ${innerTail[0]} ${innerTail[1]},
       C ${innerTailBezierPoint[0]} ${innerTailBezierPoint[1]} ${
       innerTipBezierPoint[0]
@@ -118,10 +119,9 @@ function arrowView(x, y, color, options) {
     style: {
       fill: color,
       transformOrigin: `${x}px ${y}px`,
-      transform: `rotate(${angle +
-        (options.end
-          ? angleCorrection
-          : -angleCorrection)}deg) scale(${scale})`,
+      transform: `rotate(${
+        angle + (options.end ? angleCorrection : -angleCorrection)
+      }deg) scale(${scale})`,
     },
   })
 }

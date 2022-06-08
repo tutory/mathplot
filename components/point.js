@@ -4,7 +4,6 @@ const {
   crossSize,
   circleRadius,
   dotRadius,
-  group,
 } = require('./forms')
 const { min, max } = require('../utils')
 

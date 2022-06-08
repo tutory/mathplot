@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView, formView, arrowLength, group } = require('./forms')
+const { clozeView, formView, arrowLength } = require('./forms')
 const { min, max } = require('../utils')
 
 const MARGIN = 10
@@ -44,7 +44,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
 
   function labelView() {
     if (!args.label) return
-    isHorizontalish =
+    const isHorizontalish =
       Math.abs(args.endX - args.startX) > Math.abs(args.endY - args.startY)
     const labelX =
       args.labelX == null ? (args.startX + args.endX) / 2 : args.labelX
@@ -84,10 +84,10 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   }
 
   function lineView() {
-    let points = [[args.startX, args.startY], [args.endX, args.endY]].map(p => [
-      offScaleX(p[0]),
-      offScaleY(p[1]),
-    ])
+    let points = [
+      [args.startX, args.startY],
+      [args.endX, args.endY],
+    ].map(p => [offScaleX(p[0]), offScaleY(p[1])])
     const length = distance(points[0], points[1])
     if (args.startForm === 'arrow') {
       const factor = (length - arrowLength / 2) / length

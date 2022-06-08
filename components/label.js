@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { clozeView, group } = require('./forms')
+const { clozeView } = require('./forms')
 
 function view(args, { offScaleX, offScaleY, showSolution }) {
   args = Object.assign(
