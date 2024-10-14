@@ -36,6 +36,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
       isYAxisVisible: true,
       isGridXVisible: true,
       isGridYVisible: true,
+      originLabel: 'O',
     },
     args
   )
@@ -217,7 +218,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         y: offScaleY(0) + MARGIN,
         x: offScaleX(0) - MARGIN,
       },
-      'O'
+      args.originLabel
     )
   }
 
