@@ -50,6 +50,19 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     stroke: args.gridColor,
     strokeDasharray: args.gridStrokeDasharray,
   }
+  const gridStyleX = {
+    ...gridStyle,
+    strokeWidth: `${args.gridStrokeWidthX}px`,
+    stroke: args.gridColorX,
+    strokeDasharray: args.gridStrokeDasharrayX,
+  }
+
+  const gridStyleY = {
+    ...gridStyle,
+    strokeWidth: `${args.gridStrokeWidthY}px`,
+    stroke: args.gridColorY,
+    strokeDasharray: args.gridStrokeDasharrayY,
+  }
 
   function xLabelsView() {
     const include0 = !args.isYAxisVisible
@@ -91,7 +104,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
           y1: offScaleY(args.endY),
           x2: offScaleX(x),
           y2: offScaleY(args.startY),
-          style: gridStyle,
+          style: gridStyleX,
         }),
       ]
     })
@@ -161,7 +174,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
           x1: offScaleX(args.endX),
           y2: offScaleY(y),
           x2: offScaleX(args.startX),
-          style: gridStyle,
+          style: gridStyleY,
         }),
       ]
     })
