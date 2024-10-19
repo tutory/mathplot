@@ -14,34 +14,30 @@ const ef = 'bar'
 shapes = [
   {
     type: 'coord',
-    args: Object.assign(
-      {
-        stepLabelsX: 1,
-        stepLabelsY: 1,
-        stepGridX: 1,
-        stepGridY: 1,
-        labelY: 'f(x)',
-        labelX: 'x',
-        unitX: 'm',
-        gridStrokeDasharray: '2 2',
-      },
-      dimensions
-    ),
+    args: {
+      stepLabelsX: 1,
+      stepLabelsY: 1,
+      stepGridX: 1,
+      stepGridY: 1,
+      labelY: 'f(x)',
+      labelX: 'x',
+      unitX: 'm',
+      gridStrokeDasharray: '2 2',
+      ...dimensions,
+    },
   },
   {
     type: 'function',
-    args: Object.assign(
-      {
-        fn: x => Math.tan(0.1 * x * x),
-        label: 'tan(x*x)',
-        color: 'turquoise',
-      },
-      dimensions
-    ),
+    args: {
+      fn: x => Math.tan(0.1 * x * x),
+      label: 'tan(x*x)',
+      color: 'turquoise',
+      ...dimensions,
+    },
   },
   {
     type: 'function',
-    args: Object.assign({
+    args: {
       fn: x => 1 / x,
       label: 'G(x)',
       color: 'turquoise',
@@ -50,21 +46,19 @@ shapes = [
       endX: 10,
       startY: -10,
       endY: 10,
-    }),
+    },
   },
   {
     type: 'function',
-    args: Object.assign(
-      {
-        fn: x => 1 / x,
-        label: 'f(x)',
-        labelX: 1,
-        cloze: true,
-        color: 'blue',
-        strokeDasharray: '8 4 2 4',
-      },
-      dimensions
-    ),
+    args: {
+      fn: x => 1 / x,
+      label: 'f(x)',
+      labelX: 1,
+      cloze: true,
+      color: 'blue',
+      strokeDasharray: '8 4 2 4',
+      ...dimensions,
+    },
   },
   {
     type: 'circle',

@@ -35,20 +35,18 @@ function groupPoints(points, minY, maxY, fill) {
 function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
   const labelX =
     args.labelX == null ? (args.startX + args.endX) / 2 : args.labelX
-  args = Object.assign(
-    {
-      labelX,
-      labelY: clamp(
-        args.startY + 1,
-        args.endY - 1,
-        args.fn(labelX) / (args.fill ? 2 : 1)
-      ),
-      color: 'green',
-      strokeWidth: 1,
-      strokeDasharray: null,
-    },
-    args
-  )
+  args = {
+    labelX,
+    labelY: clamp(
+      args.startY + 1,
+      args.endY - 1,
+      args.fn(labelX) / (args.fill ? 2 : 1)
+    ),
+    color: 'green',
+    strokeWidth: 1,
+    strokeDasharray: null,
+    ...args,
+  }
 
   function graphView() {
     const points = times((args.endX - args.startX) * PRECISION * scaleX).map(

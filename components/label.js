@@ -2,16 +2,14 @@ const m = global.HYPER_SCRIPT
 const { clozeView } = require('./forms')
 
 function view(args, { offScaleX, offScaleY, showSolution }) {
-  args = Object.assign(
-    {
-      color: 'black',
-      text: '',
-      angle: 0,
-      verticalAnchor: 'center',
-      horizontalAnchor: 'center',
-    },
-    args
-  )
+  args = {
+    color: 'black',
+    text: '',
+    angle: 0,
+    verticalAnchor: 'center',
+    horizontalAnchor: 'center',
+    ...args,
+  }
 
   function labelView() {
     const x = offScaleX(args.x)

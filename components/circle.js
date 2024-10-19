@@ -10,15 +10,13 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   if (args.cloze) {
     labelOffset += 10
   }
-  args = Object.assign(
-    {
-      radiusX: args.radius || 1,
-      radiusY: args.radius || args.radiusX || 1,
-      labelX: args.x,
-      labelY: args.y - labelOffset / scaleY,
-    },
-    args
-  )
+  args = {
+    radiusX: args.radius || 1,
+    radiusY: args.radius || args.radiusX || 1,
+    labelX: args.x,
+    labelY: args.y - labelOffset / scaleY,
+    ...args,
+  }
 
   function labelView() {
     if (!args.label) return

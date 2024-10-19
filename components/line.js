@@ -26,16 +26,14 @@ function getAngleByVector(x, y) {
 }
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
-  args = Object.assign(
-    {
-      strokeWidth: 2,
-      color: 'orange',
-      strokeDasharray: null,
-      startForm: null,
-      endForm: null,
-    },
-    args
-  )
+  args = {
+    strokeWidth: 2,
+    color: 'orange',
+    strokeDasharray: null,
+    startForm: null,
+    endForm: null,
+    ...args,
+  }
 
   const angle = getAngleByVector(
     scaleX * (args.endX - args.startX),

@@ -3,13 +3,11 @@ const { clozeView, group } = require('./forms')
 const { min, max } = require('../utils')
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
-  args = Object.assign(
-    {
-      labelX: args.x + args.width / 2,
-      labelY: args.y - args.height / 2,
-    },
-    args
-  )
+  args = {
+    labelX: args.x + args.width / 2,
+    labelY: args.y - args.height / 2,
+    ...args,
+  }
 
   function labelView() {
     if (!args.label) return

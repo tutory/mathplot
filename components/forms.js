@@ -104,10 +104,12 @@ function arrowView(x, y, color, options) {
   }
   const scale = 0.5 + (options.strokeWidth || 1) * 0.5
   const angleCorrection = options.radius ? (12 * scale) / options.radius : 0
-  const { angle, l, w } = Object.assign(
-    { angle: 0, l: DEFAULT_ARROW_LENGTH, w: 10 },
-    options
-  )
+  const { angle, l, w } = {
+    angle: 0,
+    l: DEFAULT_ARROW_LENGTH,
+    w: 10,
+    ...options,
+  }
 
   return m('path', {
     d: `M ${x} ${y}
@@ -127,16 +129,14 @@ function arrowView(x, y, color, options) {
 }
 
 function crossView(x, y, color, options = {}) {
-  const { strokeWidth, crossSize, angle } = Object.assign(
-    {
-      angle: 0,
-      strokeWidth: 2,
-      crossSize:
-        DEFAULT_CROSS_SIZE *
-        (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
-    },
-    options
-  )
+  const { strokeWidth, crossSize, angle } = {
+    angle: 0,
+    strokeWidth: 2,
+    crossSize:
+      DEFAULT_CROSS_SIZE *
+      (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
+    ...options,
+  }
 
   const crossLineStyle = {
     strokeWidth: px(strokeWidth),
@@ -165,16 +165,14 @@ function crossView(x, y, color, options = {}) {
 }
 
 function barView(x, y, color, options = {}) {
-  const { strokeWidth, crossSize, angle } = Object.assign(
-    {
-      angle: 0,
-      strokeWidth: 2,
-      crossSize:
-        DEFAULT_CROSS_SIZE *
-        (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
-    },
-    options
-  )
+  const { strokeWidth, crossSize, angle } = {
+    angle: 0,
+    strokeWidth: 2,
+    crossSize:
+      DEFAULT_CROSS_SIZE *
+      (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
+    ...options,
+  }
 
   const crossLineStyle = {
     strokeWidth: px(strokeWidth),
@@ -196,15 +194,13 @@ function barView(x, y, color, options = {}) {
 }
 
 function circleView(x, y, color, options = {}) {
-  const { strokeWidth, radius } = Object.assign(
-    {
-      strokeWidth: 2,
-      radius:
-        DEFAULT_CIRCLE_RADIUS *
-        (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
-    },
-    options
-  )
+  const { strokeWidth, radius } = {
+    strokeWidth: 2,
+    radius:
+      DEFAULT_CIRCLE_RADIUS *
+      (options.strokeWidth ? Math.sqrt(options.strokeWidth) : 1),
+    ...options,
+  }
 
   return m('circle', {
     cx: x,
@@ -255,13 +251,12 @@ function formView(type, x, y, color, options) {
 const clozeWidth = 12
 const clozeHeight = 30
 function clozeView(x, y, label, options) {
-  options = Object.assign(
-    {
-      vertical: 'center',
-      horizontal: 'center',
-    },
-    options
-  )
+  options = {
+    vertical: 'center',
+    horizontal: 'center',
+    ...options,
+  }
+
   if (!options.cloze) {
     return textView(x, y, label, options)
   }
@@ -298,13 +293,14 @@ function clozeView(x, y, label, options) {
         x + offsetX + width / 2,
         y + offsetY + height / 2 + CLOZE_VERTICAL_POSITION_CORRECTION,
         label,
-        Object.assign({}, options, {
+        {
+          ...options,
           className: 'clozeText',
           color: '#666666',
           autoBackground: false,
           horizontal: 'center',
           vertical: 'center',
-        })
+        }
       ),
   ]
 }
@@ -316,13 +312,11 @@ function textView(x, y, label, options) {
     {
       x,
       y,
-      style: Object.assign(
-        {
-          fill: options.color || 'black',
-          stroke: options.autoBackground === false ? 'none' : null,
-        },
-        options.style
-      ),
+      style: {
+        fill: options.color || 'black',
+        stroke: options.autoBackground === false ? 'none' : null,
+        ...options.style,
+      },
       className: cls({
         [options.className]: options.className,
         verticalTop: options.vertical === 'top',

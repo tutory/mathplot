@@ -19,14 +19,12 @@ function sum(arr) {
 function view(args, { offScaleX, offScaleY, showSolution }) {
   const centerX = sum(args.points.map(p => p.x)) / args.points.length
   const centerY = sum(args.points.map(p => p.y)) / args.points.length
-  args = Object.assign(
-    {
-      strokeWidth: '2px',
-      color: 'orange',
-      fill: 'none',
-    },
-    args
-  )
+  args = {
+    strokeWidth: '2px',
+    color: 'orange',
+    fill: 'none',
+    ...args,
+  }
 
   function pathView() {
     return m('path', {

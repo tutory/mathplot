@@ -95,13 +95,11 @@ module.exports = function view(
     ),
     m(
       'svg.mathplot',
-      Object.assign(
-        {
-          width: `${(maxX - minX) * scaleX}px`,
-          height: `${(maxY - minY) * scaleY}px`,
-        },
-        attrs
-      ),
+      {
+        width: `${(maxX - minX) * scaleX}px`,
+        height: `${(maxY - minY) * scaleY}px`,
+        ...attrs,
+      },
       renderedShapes
     ),
   ]

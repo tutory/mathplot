@@ -19,7 +19,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY, showSolution }) {
   const isLargeArc = mod(args.endAngle - args.startAngle, 360) > 180 ? 1 : 0
   const strokeWidth = args.strokeWidth || 2
 
-  args = Object.assign({}, args)
+  args = { ...args }
 
   function getLabelPos() {
     if (args.labelX != null && args.labelY != null) {

@@ -21,25 +21,23 @@ function range0(from, to, step = 1, include0 = false) {
 }
 
 function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
-  args = Object.assign(
-    {
-      labelX: 'x',
-      labelY: 'y',
-      stepLabelsX: args.stepGridX || 1,
-      stepLabelsY: args.stepGridY || 1,
-      labelXView: x => round(x),
-      labelYView: x => round(x),
-      gridColor: 'lightblue',
-      gridStrokeWidth: 1,
-      axisColor: 'black',
-      isXAxisVisible: true,
-      isYAxisVisible: true,
-      isGridXVisible: true,
-      isGridYVisible: true,
-      originLabel: 'O',
-    },
-    args
-  )
+  args = {
+    labelX: 'x',
+    labelY: 'y',
+    stepLabelsX: args.stepGridX || 1,
+    stepLabelsY: args.stepGridY || 1,
+    labelXView: x => round(x),
+    labelYView: x => round(x),
+    gridColor: 'lightblue',
+    gridStrokeWidth: 1,
+    axisColor: 'black',
+    isXAxisVisible: true,
+    isYAxisVisible: true,
+    isGridXVisible: true,
+    isGridYVisible: true,
+    originLabel: 'O',
+    ...args,
+  }
 
   const axisStyle = {
     strokeWidth: '1px',

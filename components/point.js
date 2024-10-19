@@ -10,14 +10,13 @@ const { min, max } = require('../utils')
 const MARGIN = 5
 
 function view(args, { offScaleX, offScaleY, showSolution }) {
-  args = Object.assign(
-    {
-      strokeWidth: 2,
-      color: 'blue',
-      form: 'cross',
-    },
-    args
-  )
+  args = {
+    strokeWidth: 2,
+    color: 'blue',
+    form: 'cross',
+    ...args,
+  }
+
   const halfStrokeWidth = args.strokeWidth / 2
 
   function labelView() {
