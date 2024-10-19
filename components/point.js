@@ -39,6 +39,8 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
       horizontal: args.labelHorizontalAlign || 'left',
       cloze: args.cloze,
       showSolution,
+      labelX: args.labelX,
+      labelY: args.labelY,
     })
   }
 

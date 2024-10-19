@@ -25,6 +25,8 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
         transformOrigin: `${x}px ${y}px`,
         transform: `rotate(${args.rotation}deg)`,
       },
+      labelX: args.labelX,
+      labelY: args.labelY,
     })
   }
 

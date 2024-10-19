@@ -96,6 +96,8 @@ function view(args, { offScaleX, offScaleY, scaleX, showSolution }) {
           fontStyle: 'italic',
           fontWeight: 'bold',
         },
+        labelX: args.labelX,
+        labelY: args.labelY,
       }
     )
   }

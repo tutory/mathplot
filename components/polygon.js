@@ -51,6 +51,8 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
       autoBackground: !args.fill,
       cloze: args.cloze,
       showSolution,
+      labelX,
+      labelY,
     })
   }
 
