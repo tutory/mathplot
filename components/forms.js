@@ -1,5 +1,5 @@
 const m = global.HYPER_SCRIPT
-const { cls } = require('../utils')
+const { cls, isFunction } = require('../utils')
 
 const DEFAULT_ARROW_LENGTH = 20
 const DEFAULT_CROSS_SIZE = 10
@@ -310,6 +310,7 @@ function clozeView(x, y, label, options) {
 }
 
 function textView(x, y, label, options) {
+  if (isFunction(label)) return label(x, y, options)
   return m(
     'text',
     {

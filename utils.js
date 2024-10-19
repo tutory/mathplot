@@ -42,13 +42,18 @@ function max(...args) {
   return Math.max(...args.filter(a => a != null))
 }
 
+function isFunction(a) {
+  return typeof a === 'function'
+}
+
 module.exports = {
-  toInt,
-  times,
-  last,
-  cls,
   clamp,
-  penultimate,
-  min,
+  cls,
+  isFunction,
+  last,
   max,
+  min,
+  penultimate,
+  times,
+  toInt,
 }
