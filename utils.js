@@ -30,10 +30,6 @@ function clamp(min, max, x) {
   return x
 }
 
-function penultimate(arr) {
-  return arr[arr.length - 2]
-}
-
 function min(...args) {
   return Math.min(...args.filter(a => a != null))
 }
@@ -53,7 +49,6 @@ module.exports = {
   last,
   max,
   min,
-  penultimate,
   times,
   toInt,
 }

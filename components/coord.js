@@ -1,5 +1,4 @@
 const m = global.HYPER_SCRIPT
-const { penultimate } = require('../utils')
 const lineView = require('./line').view
 const { group } = require('./forms')
 
@@ -72,16 +71,14 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
       include0
     )
     return steps.map(x => {
-      const isAxisUnit = args.unitX && x === penultimate(steps)
       return [
         m(
           'text.horizontalCenter.verticalTop',
           {
             x: offScaleX(x),
             y: offScaleY(0) + MARGIN,
-            className: isAxisUnit ? 'axisUnit' : '',
           },
-          isAxisUnit ? args.unitX : args.labelXView(x)
+          args.labelXView(x)
         ),
         m('line', {
           x1: offScaleX(x),
@@ -118,16 +115,14 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
       include0
     )
     return steps.map(y => {
-      const isAxisUnit = args.unitY && y === penultimate(steps)
       return [
         m(
           'text.verticalCenter.horizontalRight',
           {
             x: offScaleX(0) - MARGIN,
             y: offScaleY(y),
-            className: isAxisUnit ? 'axisUnit' : '',
           },
-          isAxisUnit ? args.unitY : args.labelYView(y)
+          args.labelYView(y)
         ),
         m('line', {
           x1: offScaleX(0) - MARGIN,
@@ -140,6 +135,12 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
     })
   }
 
+  function axisLabelView(label, unit) {
+    if (!unit) return label
+    if (!label) return unit
+    return `${label} (${unit})`
+  }
+
   function xAxisLabelView() {
     return m(
       'text.horizontalRight.verticalTop',
@@ -148,7 +149,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         y: offScaleY(0) + MARGIN,
         className: 'axisLabel',
       },
-      args.labelX
+      axisLabelView(args.labelX, args.unitX)
     )
   }
 
@@ -160,7 +161,7 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
         y: offScaleY(args.endY),
         className: 'axisLabel',
       },
-      args.labelY
+      axisLabelView(args.labelY, args.unitY)
     )
   }
 
