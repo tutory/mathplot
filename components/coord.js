@@ -154,15 +154,28 @@ function view(args, { offScaleX, offScaleY, scaleX, scaleY }) {
   }
 
   function yAxisLabelView() {
-    return m(
-      'text.horizontalRight.verticalTop',
-      {
-        x: offScaleX(0) - MARGIN,
-        y: offScaleY(args.endY),
-        className: 'axisLabel',
-      },
-      axisLabelView(args.labelY, args.unitY)
-    )
+    return [
+      m(
+        'text.horizontalRight.verticalTop',
+        {
+          x: offScaleX(0) - MARGIN,
+          y: offScaleY(args.endY),
+          className: 'axisLabel',
+        },
+        args.labelY || args.unitY
+      ),
+      args.labelY &&
+        args.unitY &&
+        m(
+          'text.horizontalLeft.verticalTop',
+          {
+            x: offScaleX(0) + MARGIN,
+            y: offScaleY(args.endY),
+            className: 'axisLabel',
+          },
+          `(${args.unitY})`
+        ),
+    ]
   }
 
   function yGridLinesView() {
