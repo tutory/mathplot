@@ -33,6 +33,7 @@ function view(args, { offScaleX, offScaleY, showSolution }) {
         .join(' ')} Z`,
       style: {
         strokeWidth: args.strokeWidth,
+        strokeDasharray: args.strokeDasharray,
         stroke: args.color,
         fill: args.fill,
       },
