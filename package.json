@@ -10,7 +10,7 @@
   "repository": "git@github.com:tutory/mathplot.git",
   "license": "MIT",
   "devDependencies": {
-    "mithril": "2.2.2",
+    "mithril": "2.3.8",
     "parcel-bundler": "1.12.5"
   }
 }
