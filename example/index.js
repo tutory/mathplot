@@ -11,7 +11,7 @@ const dimensions = {
 const sf = 'cross'
 const ef = 'bar'
 
-shapes = [
+const shapes = [
   {
     type: 'coord',
     args: {

@@ -3,14 +3,17 @@
   "version": "0.17.1",
   "description": "hyper script based math plotter",
   "main": "index.js",
+  "targets": {
+    "main": false
+  },
   "scripts": {
-    "start": "./node_modules/parcel-bundler/bin/cli.js example/index.html"
+    "start": "parcel serve example/index.html --open"
   },
   "author": "",
   "repository": "git@github.com:tutory/mathplot.git",
   "license": "MIT",
   "devDependencies": {
     "mithril": "2.3.8",
-    "parcel-bundler": "1.12.5"
+    "parcel": "2.16.1"
   }
 }
